@@ -1,44 +1,75 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
-import { Alert, Button, Image, Card, Row, Col } from 'antd';
+
+import {
+  Modal,
+  Form,
+  Input,
+  Upload,
+  message,
+  Slider,
+  Tabs,
+  Row,
+  Col,
+  Image,
+} from 'antd';
+import { TScriptInfo } from '@/types';
+import ScriptInfo from '@/components/ScriptInfo';
 import { request } from 'umi';
 
-import RoleInfo from './RoleInfo';
-
-type TGameScripts = {
-  rolesList: any[];
-  gameId: number;
+type TGameClues = {
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  onUpdate?: () => void;
+  roleId: number;
 };
-const GameScripts: FC<TGameScripts> = ({ rolesList, gameId }) => {
-  const initRoles = async () => {
-    const res = await request(`./api/game/initRoles/${gameId}`, {
-      method: 'POST',
-    });
-    console.log(res);
+
+const GameClues: FC<TGameClues> = ({
+  visible,
+  setVisible,
+  onUpdate,
+  roleId,
+}) => {
+  const [scriptsList, setScriptsList] = useState<TScriptInfo[]>([]);
+  const getDetail = useCallback(async () => {
+    const res = await request(`./api/scripts/getAllScripts/${roleId}`);
+    if (res.code === 200) {
+      setScriptsList(res.data);
+    }
+  }, [roleId]);
+
+  useEffect(() => {
+    if (visible && roleId) {
+      getDetail();
+    }
+  }, [visible, roleId]);
+
+  const onCancel = () => {
+    setVisible(false);
   };
-
-  const EmptyRole = (
-    <div>
-      <Alert message="当前没有角色,你可以从导入中初始化生成" type="warning" />
-      <Button onClick={initRoles}>初始化角色</Button>
-    </div>
+  const onOk = () => {};
+  const title = '角色剧本';
+  return (
+    <Modal
+      width={1000}
+      visible={visible}
+      onCancel={onCancel}
+      onOk={onOk}
+      title={title}
+      maskClosable={false}
+    >
+      <Row>
+        <Image.PreviewGroup>
+          {scriptsList.map((item, index) => {
+            return (
+              <Col span={6} key={index}>
+                <ScriptInfo {...item} />
+              </Col>
+            );
+          })}
+        </Image.PreviewGroup>
+      </Row>
+    </Modal>
   );
-
-  const RolesList = (
-    <Row>
-      {rolesList.map((item, index) => {
-        return (
-          <Col key={index}>
-            <RoleInfo
-              roleName={item?.roleName}
-              avatar={'./api/组织者手册/背面.jpg'}
-            />
-          </Col>
-        );
-      })}
-    </Row>
-  );
-
-  return <div>{rolesList.length === 0 ? EmptyRole : RolesList}</div>;
 };
 
-export default GameScripts;
+export default GameClues;

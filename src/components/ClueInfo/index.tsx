@@ -1,31 +1,26 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Card } from 'antd';
+import { Card, Image } from 'antd';
 import {
   EditOutlined,
   EllipsisOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
 const { Meta } = Card;
-type TRoleInfo = {
-  avatar?: string;
-  roleName: string;
-  description?: string;
-};
-const RoleInfo: FC<TRoleInfo> = ({ avatar, roleName, description }) => {
+import { TClueInfo } from '@/types';
+
+const ClueInfo: FC<TClueInfo> = ({ images, code, description }) => {
   return (
     <Card
       hoverable
-      style={{ width: 240 }}
-      cover={<img alt="角色" src={avatar} />}
+      cover={<Image src={`./api/${images}`} />}
       actions={[
         <SettingOutlined key="setting" />,
         <EditOutlined key="edit" />,
         <EllipsisOutlined key="ellipsis" />,
       ]}
     >
-      <Meta title={roleName} description={description} />
+      <Meta title={code} description={description} />
     </Card>
   );
 };
-
-export default RoleInfo;
+export default ClueInfo;
