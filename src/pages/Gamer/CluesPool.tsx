@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button, Divider, message, Image, Row, Col } from 'antd';
 import { request } from 'umi';
 
-const Left = () => {
+const CluesPool = () => {
   const [cluesList, setCluesList] = useState([]);
 
   const getNewClues = async () => {
@@ -59,4 +59,4 @@ const Left = () => {
   );
 };
 
-export default Left;
+export default CluesPool;

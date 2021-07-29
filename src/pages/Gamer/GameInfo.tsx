@@ -1,25 +1,28 @@
-import { useEffect, useState } from 'react';
-import { Row, Col, Image, Tabs, List, Avatar } from 'antd';
-import { request } from 'umi';
+import { useEffect, useState, FC } from 'react';
+import { Row, Col, Image, Tabs, List, Avatar, Button } from 'antd';
+import { request, connect, ConnectProps } from 'umi';
 const { TabPane } = Tabs;
-const Right = () => {
-  const [gameInfo, setGameInfo] = useState(null);
-  const [gameRoles, setGameRoles] = useState([]);
-  useEffect(() => {
-    (async function () {
-      const res = await request('./api/game/getCurrentGame');
-      if (res.code === 200) {
-        setGameInfo(res.data);
-      }
-    })();
-    (async function () {
-      const res = await request('./api/roles/list?gameId=1');
-      console.log(res);
-      if (res.code === 200) {
-        setGameRoles(res.data);
-      }
-    })();
-  }, []);
+import { GamerState } from '@/pages/models/gamer';
+import localforage from 'localforage';
+const connector = ({ gamer }: { gamer: GamerState }) => {
+  return {
+    gameInfo: gamer.gameInfo,
+    rolesList: gamer.rolesList,
+  };
+};
+
+interface IGameInfo extends GamerState {}
+
+const GameInfo: FC<IGameInfo> = ({ gameInfo, rolesList }) => {
+  const initMyRole = async () => {
+    const user = await localforage.getItem('user');
+    await request(`./api/game/initMyRole/${gameInfo?.id}`, {
+      method: 'POST',
+      params: {
+        user,
+      },
+    });
+  };
 
   return (
     <div style={{ height: '100%' }}>
@@ -67,7 +70,10 @@ const Right = () => {
       <div style={{ overflowY: 'auto', height: 'calc( 100% - 150px )' }}>
         <Tabs defaultActiveKey="1">
           <TabPane tab="角色" key="1">
-            {gameRoles.map((item) => {
+            {rolesList.length === 0 && (
+              <Button onClick={initMyRole}>随机我的角色</Button>
+            )}
+            {rolesList.map((item) => {
               return (
                 <div key={item.id} style={{ display: 'flex' }}>
                   <Avatar
@@ -80,23 +86,11 @@ const Right = () => {
               );
             })}
           </TabPane>
-          <TabPane tab="我的" key="2">
-            <Image.PreviewGroup>
-              {new Array(15).fill(1).map((item, index) => {
-                return (
-                  <Image
-                    width={'100%'}
-                    key={index}
-                    src={require(`@/static/me/${index + 1}.jpg`)}
-                  />
-                );
-              })}
-            </Image.PreviewGroup>
-          </TabPane>
+          <TabPane tab="我的" key="2"></TabPane>
         </Tabs>
       </div>
     </div>
   );
 };
 
-export default Right;
+export default connect(connector)(GameInfo);

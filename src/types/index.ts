@@ -36,3 +36,23 @@ export type TScriptInfo = {
   orderNo?: number;
   id: number;
 };
+
+export type TGameInfo = {
+  id: number;
+  gameName: string;
+  description?: string;
+  status?: number;
+  cluesEnable?: number;
+  maxClues?: number;
+  round: number;
+  dm?: string;
+  roundTotal?: number;
+  minUser?: number;
+  maxUser?: number;
+};
+
+export type TRequestResult = {
+  code: number;
+  msg: string;
+  data: any;
+};
