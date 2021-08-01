@@ -70,7 +70,7 @@ const GameClues: FC<TGameClues> = ({ cluesList }) => {
           {Array.from(roundMap.entries()).map(([loc, cluesList]) => (
             <div key={loc}>
               <div>{loc}</div>
-              <Row>
+              <Row gutter={4}>
                 {cluesList.map((item) => (
                   <Col key={item.id} span={6}>
                     <ClueInfo {...item} />

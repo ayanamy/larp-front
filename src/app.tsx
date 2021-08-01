@@ -12,11 +12,3 @@ export function rootContainer(container: React.ReactNode) {
   );
 }
 
-const ResponseInterceptors = (response: Response) => {
-  console.log(process.env.NODE_EN)
-  console.log(response);
-  if(response.status!==200){
-    console.log()
-  }
-  return response;
-};

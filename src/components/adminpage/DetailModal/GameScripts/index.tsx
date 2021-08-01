@@ -31,7 +31,7 @@ const GameClues: FC<TGameClues> = ({
 }) => {
   const [scriptsList, setScriptsList] = useState<TScriptInfo[]>([]);
   const getDetail = useCallback(async () => {
-    const res = await request(`./scripts/getAllScripts/${roleId}`);
+    const res = await request(`/scripts/getAllScripts/${roleId}`);
     if (res.code === 200) {
       setScriptsList(res.data);
     }
@@ -57,7 +57,7 @@ const GameClues: FC<TGameClues> = ({
       title={title}
       maskClosable={false}
     >
-      <Row>
+      <Row gutter={4}>
         <Image.PreviewGroup>
           {scriptsList.map((item, index) => {
             return (

@@ -21,14 +21,17 @@ const errorHandler = (error: {
   data: any;
 }) => {
   const { response, message, data } = error;
+  console.log(error);
 
-  const { res } = data;
-  const { msg } = res;
+  if (message === 'CustomError') {
+    const { res } = data;
+    const { msg } = res;
 
-  notification.error({
-    message: `提示`,
-    description: msg,
-  });
+    notification.error({
+      message: `提示`,
+      description: msg,
+    });
+  }
 
   throw error; // 如果throw. 错误将继续抛出,走catch流程.
 };

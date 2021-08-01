@@ -53,6 +53,6 @@ export type TGameInfo = {
 
 export type TRequestResult = {
   code: number;
-  msg: string;
-  data: any;
+  msg?: string;
+  data?: any;
 };

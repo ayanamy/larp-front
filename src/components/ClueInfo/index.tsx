@@ -12,7 +12,7 @@ const ClueInfo: FC<TClueInfo> = ({ images, code, description }) => {
   return (
     <Card
       hoverable
-      cover={<Image src={`./${images}`} />}
+      cover={<Image src={`./api/${images}`} />}
       actions={[
         <SettingOutlined key="setting" />,
         <EditOutlined key="edit" />,

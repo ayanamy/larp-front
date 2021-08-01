@@ -16,7 +16,7 @@ const GameRoles: FC<TGameRoles> = ({ rolesList, gameId }) => {
   return (
     <div>
       <Image.PreviewGroup>
-        <Row>
+        <Row gutter={4}>
           {rolesList.map((item, index) => {
             return (
               <Col span={6} key={index}>

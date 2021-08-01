@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { Button, Divider, message, Image, Row, Col } from 'antd';
 import { request } from '@/utils';
 
-import { WSContext } from './index';
+import { WSContext } from '../index';
 
 const CluesPool = () => {
   const [cluesList, setCluesList] = useState([]);
@@ -41,13 +41,13 @@ const CluesPool = () => {
       <div>
         <Button onClick={getNewClues}>获取线索</Button>
       </div>
-      <Row>
+      <Row gutter={4}>
         {cluesList.map((item, index) => {
           return (
             <Col span={8} key={index}>
               <Image
                 width={'100%'}
-                src="./201房间线索/Elaine的电子邮件.png"
+                src="./api/201房间线索/Elaine的电子邮件.png"
               />
             </Col>
           );

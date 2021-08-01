@@ -4,7 +4,11 @@ import { request } from '@/utils';
 import { GamerState } from '@/pages/models/gamer';
 import { message, Row, Col, Empty } from 'antd';
 
-import Control from './Control';
+import RolesControl from './components/RolesControl';
+import GameControl from './components/GameControl';
+import Handbook from './components/Handbook';
+import GameStatistic from './components/GameStatistic';
+import GameIntro from '@/components/GameIntro';
 
 interface IDM extends GamerState {}
 export const WSContext = createContext<WebSocket | null>(null);
@@ -60,12 +64,30 @@ const DM: FC<IDM> = ({ gameInfo }) => {
   return (
     <WSContext.Provider value={ws.current}>
       {gameInfo ? (
-        <Row>
-          <Col span={14}>
-
+        <Row gutter={4}>
+          <Col
+            span={14}
+            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+          >
+            <GameStatistic />
+            <GameControl />
           </Col>
-          <Col span={10}>
-            <Control />
+          <Col
+            span={10}
+            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+          >
+            <div style={{ height: '200px', overflow: 'auto' }}>
+              <GameIntro
+                gameName={gameInfo.gameName ?? ''}
+                description={gameInfo.description || ''}
+              />
+            </div>
+            <div style={{ height: '300px', overflow: 'auto' }}>
+              <RolesControl />
+            </div>
+            <div style={{ height: 'calc(100% - 500px)', overflow: 'auto' }}>
+              <Handbook />
+            </div>
           </Col>
         </Row>
       ) : (

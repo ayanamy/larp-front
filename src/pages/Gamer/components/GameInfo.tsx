@@ -1,11 +1,12 @@
 import { useEffect, useState, FC } from 'react';
 import { Row, Col, Image, Tabs, List, Avatar, Button, message } from 'antd';
-import { connect, ConnectProps } from 'umi';
+import { connect, ConnectProps, useDispatch } from 'umi';
 import { request } from '@/utils';
 const { TabPane } = Tabs;
 import { GamerState } from '@/pages/models/gamer';
 import localforage from 'localforage';
 import RolesList from '@/components/RolesList';
+import GameIntro from '@/components/GameIntro';
 const connector = ({ gamer }: { gamer: GamerState }) => {
   return {
     gameInfo: gamer.gameInfo,
@@ -13,9 +14,10 @@ const connector = ({ gamer }: { gamer: GamerState }) => {
   };
 };
 
-interface IGameInfo extends GamerState {}
+type TGameInfo = Pick<GamerState, 'gameInfo' | 'rolesList'>;
 
-const GameInfo: FC<IGameInfo> = ({ gameInfo, rolesList }) => {
+const GameInfo: FC<TGameInfo> = ({ gameInfo, rolesList }) => {
+  const dispatch = useDispatch();
   const initMyRole = async () => {
     const user = await localforage.getItem('user');
     const res = await request(`/game/initMyRole/${gameInfo?.id}`, {
@@ -24,9 +26,26 @@ const GameInfo: FC<IGameInfo> = ({ gameInfo, rolesList }) => {
         user,
       },
     });
-    if (res.code === 200) {
-    } else {
-    }
+    await localforage.setItem('roleId', res.data.id);
+    dispatch({
+      type: 'gamer/getRolesList',
+      payload: {
+        gameId: gameInfo?.id,
+        user,
+      },
+    });
+    message.success('初始化成功');
+  };
+
+  const getMyScript = async () => {
+    const roleId = await localforage.getItem<number>('roleId');
+    const res = await request('/scripts/getScripts', {
+      method: 'GET',
+      params: {
+        roleId,
+        gameId: gameInfo?.id,
+      },
+    });
   };
 
   return (
@@ -38,19 +57,12 @@ const GameInfo: FC<IGameInfo> = ({ gameInfo, rolesList }) => {
           overflowY: 'auto',
         }}
       >
-        <Row>
+        <Row gutter={4}>
           <Col span={20}>
-            <h3
-              style={{
-                width: '300px',
-                fontSize: 22,
-                height: 40,
-                borderBottom: '4px solid #000',
-              }}
-            >
-              剧本名称： {gameInfo?.gameName}
-            </h3>
-            <div>{gameInfo?.description}</div>
+            <GameIntro
+              gameName={gameInfo?.gameName || ''}
+              description={gameInfo?.description || ''}
+            />
           </Col>
           <Col span={4}>
             <div
@@ -80,7 +92,7 @@ const GameInfo: FC<IGameInfo> = ({ gameInfo, rolesList }) => {
             )}
             <RolesList rolesList={rolesList} />
           </TabPane>
-          <TabPane tab="我的" key="2"></TabPane>
+          <TabPane tab="我的剧情" key="2"></TabPane>
         </Tabs>
       </div>
     </div>

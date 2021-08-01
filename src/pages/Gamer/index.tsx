@@ -1,10 +1,10 @@
 import { useEffect, FC, useRef, createContext } from 'react';
-import CluesPool from './CluesPool';
-import GameInfo from './GameInfo';
+import CluesPool from './components/CluesPool';
+import GameInfo from './components/GameInfo';
 import { Row, Col, Empty, message } from 'antd';
 import { request } from '@/utils';
 import localforage from 'localforage';
-import { connect, useDispatch } from 'umi';
+import { connect, useDispatch, Dispatch } from 'umi';
 import { GamerState } from '@/pages/models/gamer';
 import { TGameInfo } from '@/types';
 import React from 'react';
@@ -15,37 +15,30 @@ const connector = ({ gamer }: { gamer: GamerState }) => {
 };
 
 interface IGamer {
-  gameInfo: TGameInfo|null;
+  gameInfo: TGameInfo | null;
+  dispatch: Dispatch;
 }
 
 export const WSContext = createContext<WebSocket | null>(null);
 
-const Gamer: FC<IGamer> = ({ gameInfo }) => {
+const Gamer: FC<IGamer> = ({ gameInfo, dispatch }) => {
   const ws = useRef<WebSocket | null>(null);
-  const dispatch = useDispatch();
   const getCurrentGame = async () => {
-    const user = await localforage.getItem('user');
-    const res = await request('/game/getCurrentGame', {
-      method: 'GET',
+    const user = await localforage.getItem<string>('user');
+    const data = await dispatch({
+      type: 'gamer/getGameInfo',
     });
-    if (res.code === 200) {
-      if (res?.data) {
-        dispatch({
-          type: 'gamer/setGameInfo',
-          payload: res.data,
-        });
-        if ((res.data.round ?? -1) > -1) {
-          getRoles(res?.data?.id);
-        }
-      }
-    } else {
-      message.warning(res.msg);
-    }
+    getRoles(data?.id, user!);
   };
 
-  const getRoles = async (gameId: number) => {
-    const res = await request(`/roles/list?gameId=${gameId}`);
-    console.log(res);
+  const getRoles = async (gameId: number, user: string) => {
+    const res = await request(`/roles/list`, {
+      method: 'GET',
+      params: {
+        gameId,
+        user,
+      },
+    });
     if (res.code === 200) {
       dispatch({
         type: 'gamer/setRolesList',
@@ -54,10 +47,27 @@ const Gamer: FC<IGamer> = ({ gameInfo }) => {
     }
   };
 
-
   useEffect(() => {
     getCurrentGame();
   }, []);
+
+  const getMyScript = async () => {
+    const roleId = await localforage.getItem<number>('roleId');
+    const res = await dispatch({
+      type: 'gamer/getMyScript',
+      payload: {
+        gameId: gameInfo?.id,
+        roleId,
+      },
+    });
+    console.log(res);
+  };
+
+  useEffect(() => {
+    if (gameInfo?.round && gameInfo?.round > -1) {
+      getMyScript();
+    }
+  }, [gameInfo?.round]);
 
   useEffect(() => {
     (async () => {
@@ -69,8 +79,9 @@ const Gamer: FC<IGamer> = ({ gameInfo }) => {
       //获得消息事件
       ws.current.onmessage = function (msg) {
         var serverMsg = '收到服务端信息：' + msg.data;
-        if(msg.data==='setNextRound'){
-          getCurrentGame()
+        if (msg.data === 'setNextRound') {
+          getCurrentGame();
+          message.success('已开启下一轮');
         }
         console.log(serverMsg);
       };
