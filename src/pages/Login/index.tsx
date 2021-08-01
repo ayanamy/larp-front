@@ -1,12 +1,13 @@
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { request, history } from 'umi';
+import { history } from 'umi';
+import { request } from '@/utils';
 import localforage from 'localforage';
 import './style.less';
 const Login = () => {
   console.log(1);
   const onFinish = async (values: any) => {
-    const res = await request('/api/users/login', {
+    const res = await request('/users/login', {
       method: 'POST',
       data: values,
     });

@@ -12,7 +12,7 @@ const ScriptInfo: FC<TScriptInfo> = ({ content }) => {
   return (
     <Card
       hoverable
-      cover={<Image src={`./api/${content}`} />}
+      cover={<Image src={`./${content}`} />}
       actions={[
         <SettingOutlined key="setting" />,
         <EditOutlined key="edit" />,

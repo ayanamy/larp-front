@@ -12,7 +12,7 @@ import {
 } from 'antd';
 import GameClues from './GameClues';
 import GameRoles from './GameRoles';
-import { request } from 'umi';
+import { request } from '@/utils';
 import type { TRoleInfo, TClueInfo } from '@/types';
 
 type TDetailModal = {
@@ -40,7 +40,7 @@ const DetailModal: FC<TDetailModal> = ({
   const [rolesList, setRolesList] = useState<TRoleInfo[]>([]);
   const [cluesList, setCluesList] = useState<TClueInfo[]>([])
   const getDetail = useCallback(async () => {
-    const res = await request(`./api/game/detail/${gameId}`, {
+    const res = await request(`/game/detail/${gameId}`, {
       method: 'POST',
     });
     if (res.code === 200) {
@@ -59,7 +59,7 @@ const DetailModal: FC<TDetailModal> = ({
   const onOk = () => {};
 
   const initGame = async () => {
-    const res = await request(`./api/game/initGame/${gameId}`, {
+    const res = await request(`/game/initGame/${gameId}`, {
       method: 'POST',
     });
     if (res.code === 200) {

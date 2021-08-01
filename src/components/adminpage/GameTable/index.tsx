@@ -3,7 +3,7 @@ import GameModal from '../GameModal';
 import DetailModal from '../DetailModal';
 import { Table, Button, Space, Popconfirm, message } from 'antd';
 import { ColumnType } from 'antd/es/table';
-import { request } from 'umi';
+import { request } from '@/utils';
 import {
   EditOutlined,
   FileDoneOutlined,
@@ -121,7 +121,7 @@ const GameTable: FC<any> = (props) => {
   const [selectId, setSelectId] = useState(0);
 
   const handleDelete = async (gameId: number) => {
-    const res = await request(`/api/game/delete/${gameId}`, {
+    const res = await request(`/game/delete/${gameId}`, {
       method: 'POST',
     });
     if (res.code === 200) {
@@ -133,7 +133,7 @@ const GameTable: FC<any> = (props) => {
   };
 
   const fetchList = async () => {
-    let res = await request('/api/game/list', {
+    let res = await request('/game/list', {
       method: 'GET',
     });
     if (res.code === 200) {

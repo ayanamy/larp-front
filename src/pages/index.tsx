@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 export default function IndexPage() {
   useEffect(() => {
 
-    // fetch('./api/roles/list?gameId=1')
+    // fetch('./roles/list?gameId=1')
     //   .then((res) => res.json())
     //   .then((res) => {
     //     console.log(res);

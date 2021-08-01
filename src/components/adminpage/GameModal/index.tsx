@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Modal, Form, Input, Upload, message, Slider } from 'antd';
 import { FileAddFilled, FileDoneOutlined } from '@ant-design/icons';
-import { request } from 'umi';
+import { request } from '@/utils';
 
 type TGameModal = {
   visible: boolean;
@@ -32,7 +32,7 @@ const GameModal: FC<TGameModal> = ({
     (async () => {
       if (visible) {
         if (gameId) {
-          const res = await request(`./api/game/detail?gameId=${gameId}`);
+          const res = await request(`/game/detail?gameId=${gameId}`);
           if (res.code === 200) {
             const data = {
               ...res.data,
@@ -72,7 +72,7 @@ const GameModal: FC<TGameModal> = ({
       for (const clue of clues) {
         formData.append('clues', clue);
       }
-      const res = await request('./api/game/create', {
+      const res = await request('/game/create', {
         method: 'POST',
         data: formData,
       });

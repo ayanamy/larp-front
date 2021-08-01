@@ -22,7 +22,7 @@ const RoleInfo: FC<IRoleInfo> = ({
   return (
     <Card
       hoverable
-      cover={<Image src={(avatar ||= './api/组织者手册/背面.jpg')} />}
+      cover={<Image src={(avatar ||= './组织者手册/背面.jpg')} />}
       actions={[
         <SettingOutlined key="setting" />,
         <EditOutlined key="edit" />,

@@ -1,10 +1,12 @@
 import { ImmerReducer } from 'umi';
 
-import type { TGameInfo, TRoleInfo } from '@/types';
+import type { TGameInfo, TRoleInfo, TClueInfo, TScriptInfo } from '@/types';
 
 export interface GamerState {
   gameInfo: TGameInfo | null;
   rolesList: TRoleInfo[];
+  scriptsList: TScriptInfo[];
+  cluesList: TClueInfo[];
 }
 
 export interface GamerModelType {
@@ -21,6 +23,8 @@ const GamerModel: GamerModelType = {
   state: {
     gameInfo: null,
     rolesList: [],
+    scriptsList: [],
+    cluesList: [],
   },
 
   reducers: {

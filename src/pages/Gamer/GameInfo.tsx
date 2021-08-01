@@ -1,9 +1,11 @@
 import { useEffect, useState, FC } from 'react';
-import { Row, Col, Image, Tabs, List, Avatar, Button } from 'antd';
-import { request, connect, ConnectProps } from 'umi';
+import { Row, Col, Image, Tabs, List, Avatar, Button, message } from 'antd';
+import { connect, ConnectProps } from 'umi';
+import { request } from '@/utils';
 const { TabPane } = Tabs;
 import { GamerState } from '@/pages/models/gamer';
 import localforage from 'localforage';
+import RolesList from '@/components/RolesList';
 const connector = ({ gamer }: { gamer: GamerState }) => {
   return {
     gameInfo: gamer.gameInfo,
@@ -16,12 +18,15 @@ interface IGameInfo extends GamerState {}
 const GameInfo: FC<IGameInfo> = ({ gameInfo, rolesList }) => {
   const initMyRole = async () => {
     const user = await localforage.getItem('user');
-    await request(`./api/game/initMyRole/${gameInfo?.id}`, {
+    const res = await request(`/game/initMyRole/${gameInfo?.id}`, {
       method: 'POST',
       params: {
         user,
       },
     });
+    if (res.code === 200) {
+    } else {
+    }
   };
 
   return (
@@ -73,18 +78,7 @@ const GameInfo: FC<IGameInfo> = ({ gameInfo, rolesList }) => {
             {rolesList.length === 0 && (
               <Button onClick={initMyRole}>随机我的角色</Button>
             )}
-            {rolesList.map((item) => {
-              return (
-                <div key={item.id} style={{ display: 'flex' }}>
-                  <Avatar
-                    size={40}
-                    src={<Image src={require(`@/static/1.jpg`)} />}
-                  />
-                  <div>{`${item?.roleName}(${item?.user})`}</div>
-                  <div>{item?.description}</div>
-                </div>
-              );
-            })}
+            <RolesList rolesList={rolesList} />
           </TabPane>
           <TabPane tab="我的" key="2"></TabPane>
         </Tabs>

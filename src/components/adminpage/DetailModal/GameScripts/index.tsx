@@ -14,7 +14,7 @@ import {
 } from 'antd';
 import { TScriptInfo } from '@/types';
 import ScriptInfo from '@/components/ScriptInfo';
-import { request } from 'umi';
+import { request } from '@/utils';
 
 type TGameClues = {
   visible: boolean;
@@ -31,7 +31,7 @@ const GameClues: FC<TGameClues> = ({
 }) => {
   const [scriptsList, setScriptsList] = useState<TScriptInfo[]>([]);
   const getDetail = useCallback(async () => {
-    const res = await request(`./api/scripts/getAllScripts/${roleId}`);
+    const res = await request(`./scripts/getAllScripts/${roleId}`);
     if (res.code === 200) {
       setScriptsList(res.data);
     }

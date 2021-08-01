@@ -15,7 +15,7 @@ import {
 } from 'antd';
 import { TClueInfo } from '@/types';
 import ClueInfo from '@/components/ClueInfo';
-import { request } from 'umi';
+import { request } from '@/utils';
 
 type TGameClues = {
   cluesList: TClueInfo[];
