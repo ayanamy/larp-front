@@ -2,7 +2,7 @@ import { ImmerReducer, Effect } from 'umi';
 
 import type { TGameInfo, TRoleInfo, TClueInfo, TScriptInfo } from '@/types';
 
-import { getGameInfo, getRolesList, getMyScript } from '@/api';
+import { getGameInfo, getRolesList, getMyScript, getMyClues } from '@/api';
 export interface GamerState {
   gameInfo: TGameInfo | null;
   rolesList: TRoleInfo[];
@@ -17,11 +17,13 @@ export interface GamerModelType {
     getGameInfo: Effect;
     getRolesList: Effect;
     getMyScript: Effect;
+    getMyClues: Effect;
   };
   reducers: {
     setGameInfo: ImmerReducer<GamerState>;
     setRolesList: ImmerReducer<GamerState>;
     setScriptsList: ImmerReducer<GamerState>;
+    setCluesList: ImmerReducer<GamerState>;
   };
 }
 
@@ -56,6 +58,13 @@ const GamerModel: GamerModelType = {
         payload: res.data,
       });
     },
+    *getMyClues({ payload }, { call, put }) {
+      const res = yield call(getMyClues, payload);
+      yield put({
+        type: 'setCluesList',
+        payload: res.data,
+      });
+    },
   },
   reducers: {
     setGameInfo(state, action) {
@@ -66,6 +75,9 @@ const GamerModel: GamerModelType = {
     },
     setScriptsList(state, action) {
       state.scriptsList = action.payload;
+    },
+    setCluesList(state, action) {
+      state.cluesList = action.payload;
     },
   },
 };

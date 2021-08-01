@@ -59,7 +59,7 @@ const DM: FC<IDM> = ({ gameInfo }) => {
   };
   useEffect(() => {
     getCurrentGame();
-  }, []);
+  }, [gameInfo?.id]);
 
   return (
     <WSContext.Provider value={ws.current}>

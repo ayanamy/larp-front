@@ -7,6 +7,7 @@ import { GamerState } from '@/pages/models/gamer';
 import localforage from 'localforage';
 import RolesList from '@/components/RolesList';
 import GameIntro from '@/components/GameIntro';
+import MyScripts from './MyScripts';
 const connector = ({ gamer }: { gamer: GamerState }) => {
   return {
     gameInfo: gamer.gameInfo,
@@ -35,17 +36,6 @@ const GameInfo: FC<TGameInfo> = ({ gameInfo, rolesList }) => {
       },
     });
     message.success('初始化成功');
-  };
-
-  const getMyScript = async () => {
-    const roleId = await localforage.getItem<number>('roleId');
-    const res = await request('/scripts/getScripts', {
-      method: 'GET',
-      params: {
-        roleId,
-        gameId: gameInfo?.id,
-      },
-    });
   };
 
   return (
@@ -92,7 +82,9 @@ const GameInfo: FC<TGameInfo> = ({ gameInfo, rolesList }) => {
             )}
             <RolesList rolesList={rolesList} />
           </TabPane>
-          <TabPane tab="我的剧情" key="2"></TabPane>
+          <TabPane tab="我的剧情" key="2">
+            <MyScripts />
+          </TabPane>
         </Tabs>
       </div>
     </div>

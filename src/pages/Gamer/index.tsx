@@ -7,6 +7,7 @@ import localforage from 'localforage';
 import { connect, useDispatch, Dispatch } from 'umi';
 import { GamerState } from '@/pages/models/gamer';
 import { TGameInfo } from '@/types';
+import EasterEgg from '@/components/EasterEgg';
 import React from 'react';
 const connector = ({ gamer }: { gamer: GamerState }) => {
   return {
@@ -53,6 +54,7 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch }) => {
 
   const getMyScript = async () => {
     const roleId = await localforage.getItem<number>('roleId');
+    console.log( gameInfo?.id)
     const res = await dispatch({
       type: 'gamer/getMyScript',
       payload: {
@@ -105,6 +107,7 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch }) => {
       ) : (
         <Empty description="当前没有开始剧本杀" />
       )}
+      <EasterEgg />
     </>
   );
 };

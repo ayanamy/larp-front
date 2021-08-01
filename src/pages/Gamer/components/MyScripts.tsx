@@ -25,7 +25,9 @@ const MyScripts: FC<TMyScripts> = ({ scriptsList }) => {
         scriptMap.set(round, [item]);
       }
     });
-    return Array.from(scriptMap.entries());
+    return Array.from(scriptMap.entries()).sort(
+      (prev, next) => prev[0] - next[0],
+    );
   }, [scriptsList]);
 
   return (
@@ -33,10 +35,13 @@ const MyScripts: FC<TMyScripts> = ({ scriptsList }) => {
       {scriptsGroup.map(([round, list]) => {
         return (
           <Row key={round} gutter={8}>
+            <Col span={24}>第{round}章</Col>
             {list.map((item) => {
-              <Col span={6} key={item.id}>
-                <Image src={`./api/${item.content}`} />
-              </Col>;
+              return (
+                <Col span={6} key={item.id}>
+                  <Image src={`./api/${item.content}`} />
+                </Col>
+              );
             })}
           </Row>
         );

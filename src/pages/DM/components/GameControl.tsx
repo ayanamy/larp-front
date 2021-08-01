@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Button, Space, Popconfirm } from 'antd';
-import { connect, ConnectProps } from 'umi';
+import { connect, ConnectProps, useDispatch } from 'umi';
 import { request } from '@/utils';
 import { GamerState } from '@/pages/models/gamer';
 import { TGameInfo } from '@/types';
@@ -15,15 +15,22 @@ const connector = ({ gamer }: { gamer: GamerState }) => {
 };
 
 const Control: FC<IControl> = ({ gameInfo }) => {
-  const handleNext = () => {
-    request(`/dm/setNextRound/${gameInfo?.id}`, {
+  const dispatch = useDispatch();
+  const handleNext = async () => {
+    await request(`/dm/setNextRound/${gameInfo?.id}`, {
       method: 'POST',
+    });
+    dispatch({
+      type: 'gamer/getGameInfo',
     });
   };
 
-  const handleClueEnableToggle = () => {
-    request(`/dm/setClueEnableToggle/${gameInfo?.id}`, {
+  const handleClueEnableToggle = async () => {
+    await request(`/dm/setClueEnableToggle/${gameInfo?.id}`, {
       method: 'POST',
+    });
+    dispatch({
+      type: 'gamer/getGameInfo',
     });
   };
 

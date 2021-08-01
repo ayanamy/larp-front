@@ -14,7 +14,14 @@ export const getRolesList = async (params: any) => {
 };
 
 export const getMyScript = async (params: any) => {
-  return await request('scripts/getScripts', {
+  return await request('/scripts/getScripts', {
+    method: 'GET',
+    params,
+  });
+};
+
+export const getMyClues = async (params: any) => {
+  return await request('/clues/getMyClues', {
     method: 'GET',
     params,
   });

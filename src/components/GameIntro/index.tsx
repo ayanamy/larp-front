@@ -7,7 +7,7 @@ type TGameIntro = {
 };
 const GameInfo: FC<TGameIntro> = ({ description, gameName }) => {
   return (
-    <Row >
+    <Row>
       <h3
         style={{
           width: '300px',
