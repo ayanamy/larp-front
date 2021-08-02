@@ -1,13 +1,14 @@
 import { useEffect, FC, useRef, createContext } from 'react';
 import CluesPool from './components/CluesPool';
 import GameInfo from './components/GameInfo';
-import { Row, Col, Empty, message } from 'antd';
-import { request } from '@/utils';
+import { Row, Col, Empty, message, notification } from 'antd';
+import { request, formatWSData } from '@/utils';
 import localforage from 'localforage';
 import { connect, useDispatch, Dispatch } from 'umi';
 import { GamerState } from '@/pages/models/gamer';
 import { TGameInfo } from '@/types';
 import EasterEgg from '@/components/EasterEgg';
+import { WS_MSG_TYPE } from '@/constants';
 import React from 'react';
 const connector = ({ gamer }: { gamer: GamerState }) => {
   return {
@@ -54,7 +55,6 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch }) => {
 
   const getMyScript = async () => {
     const roleId = await localforage.getItem<number>('roleId');
-    console.log( gameInfo?.id)
     const res = await dispatch({
       type: 'gamer/getMyScript',
       payload: {
@@ -62,7 +62,33 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch }) => {
         roleId,
       },
     });
-    console.log(res);
+  };
+
+  const handleWSMessage = async (msg: string) => {
+    const user = await localforage.getItem('user');
+    const result = formatWSData(msg);
+    switch (result.type) {
+      case WS_MSG_TYPE.SET_NEXT_ROUND:
+        getCurrentGame();
+        notification.info({
+          message: '已开启下一轮',
+        });
+        break;
+      case WS_MSG_TYPE.OPEN_CLUE:
+        notification.info({
+          message: '已开启线索',
+        });
+        break;
+      case WS_MSG_TYPE.SHARE_CLUE:
+        if (user !== result.from) {
+          notification.info({
+            message: `${result.from}了线索`,
+          });
+        }
+        break;
+      default:
+        break;
+    }
   };
 
   useEffect(() => {
@@ -78,14 +104,8 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch }) => {
       ws.current.onopen = function () {
         console.log('websocket已打开');
       };
-      //获得消息事件
       ws.current.onmessage = function (msg) {
-        var serverMsg = '收到服务端信息：' + msg.data;
-        if (msg.data === 'setNextRound') {
-          getCurrentGame();
-          message.success('已开启下一轮');
-        }
-        console.log(serverMsg);
+        handleWSMessage(msg.data);
       };
     })();
     return ws.current?.close();
