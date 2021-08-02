@@ -6,3 +6,5 @@ export enum WS_MSG_TYPE {
   START_VOTE = 'start_vote',
   SET_NEXT_ROUND = 'set_next_round',
 }
+
+export const API_PREFIX = '/api';

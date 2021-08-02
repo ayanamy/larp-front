@@ -66,6 +66,7 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch }) => {
 
   const handleWSMessage = async (msg: string) => {
     const user = await localforage.getItem('user');
+    const roleId = await localforage.getItem<number>('roleId');
     const result = formatWSData(msg);
     switch (result.type) {
       case WS_MSG_TYPE.SET_NEXT_ROUND:
@@ -82,9 +83,15 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch }) => {
       case WS_MSG_TYPE.SHARE_CLUE:
         if (user !== result.from) {
           notification.info({
-            message: `${result.from}了线索`,
+            message: `${result.from}分享了线索`,
           });
         }
+        dispatch({
+          type: 'gamer/getMyClues',
+          payload: {
+            roleId,
+          },
+        });
         break;
       default:
         break;
@@ -105,6 +112,9 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch }) => {
         console.log('websocket已打开');
       };
       ws.current.onmessage = function (msg) {
+        if (msg.data === '连接成功') {
+          return;
+        }
         handleWSMessage(msg.data);
       };
     })();

@@ -1,4 +1,5 @@
-import { ImmerReducer, Effect } from 'umi';
+import { ImmerReducer, Effect, Subscription } from 'umi';
+import localforage from 'localforage';
 
 import type { TGameInfo, TRoleInfo, TClueInfo, TScriptInfo } from '@/types';
 
@@ -8,6 +9,7 @@ export interface GamerState {
   rolesList: TRoleInfo[];
   scriptsList: TScriptInfo[];
   cluesList: TClueInfo[];
+  roleId: number | null;
 }
 
 export interface GamerModelType {
@@ -18,13 +20,16 @@ export interface GamerModelType {
     getRolesList: Effect;
     getMyScript: Effect;
     getMyClues: Effect;
+    getRoleId: Effect;
   };
   reducers: {
     setGameInfo: ImmerReducer<GamerState>;
     setRolesList: ImmerReducer<GamerState>;
     setScriptsList: ImmerReducer<GamerState>;
     setCluesList: ImmerReducer<GamerState>;
+    setRoleId: ImmerReducer<GamerState>;
   };
+  subscriptions: { setup: Subscription };
 }
 
 const GamerModel: GamerModelType = {
@@ -34,6 +39,7 @@ const GamerModel: GamerModelType = {
     rolesList: [],
     scriptsList: [],
     cluesList: [],
+    roleId: null,
   },
   effects: {
     *getGameInfo(_, { call, put }) {
@@ -65,6 +71,13 @@ const GamerModel: GamerModelType = {
         payload: res.data,
       });
     },
+    *getRoleId({}, { call, put }) {
+      const roleId = yield call(localforage.getItem, 'roleId');
+      yield put({
+        type: 'setRoleId',
+        payload: roleId,
+      });
+    },
   },
   reducers: {
     setGameInfo(state, action) {
@@ -78,6 +91,16 @@ const GamerModel: GamerModelType = {
     },
     setCluesList(state, action) {
       state.cluesList = action.payload;
+    },
+    setRoleId(state, action) {
+      state.roleId = action.payload;
+    },
+  },
+  subscriptions: {
+    setup({ dispatch }) {
+      dispatch({
+        type: 'getRoleId',
+      });
     },
   },
 };

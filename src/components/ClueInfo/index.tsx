@@ -8,17 +8,13 @@ import {
 const { Meta } = Card;
 import { TClueInfo } from '@/types';
 
-const ClueInfo: FC<TClueInfo> = ({ images, code, description }) => {
+interface IClueInfo extends TClueInfo {
+  actions?: React.ReactNode[] | undefined;
+}
+
+const ClueInfo: FC<IClueInfo> = ({ images, code, description, actions }) => {
   return (
-    <Card
-      hoverable
-      cover={<Image src={`./api/${images}`} />}
-      actions={[
-        <SettingOutlined key="setting" />,
-        <EditOutlined key="edit" />,
-        <EllipsisOutlined key="ellipsis" />,
-      ]}
-    >
+    <Card hoverable cover={<Image src={`/api/${images}`} />} actions={actions}>
       <Meta title={code} description={description} />
     </Card>
   );
