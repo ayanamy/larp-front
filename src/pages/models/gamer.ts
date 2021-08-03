@@ -10,6 +10,7 @@ export interface GamerState {
   scriptsList: TScriptInfo[];
   cluesList: TClueInfo[];
   roleId: number | null;
+  user: string | null;
 }
 
 export interface GamerModelType {
@@ -21,6 +22,7 @@ export interface GamerModelType {
     getMyScript: Effect;
     getMyClues: Effect;
     getRoleId: Effect;
+    getUser: Effect;
   };
   reducers: {
     setGameInfo: ImmerReducer<GamerState>;
@@ -28,6 +30,7 @@ export interface GamerModelType {
     setScriptsList: ImmerReducer<GamerState>;
     setCluesList: ImmerReducer<GamerState>;
     setRoleId: ImmerReducer<GamerState>;
+    setUser: ImmerReducer<GamerState>;
   };
   subscriptions: { setup: Subscription };
 }
@@ -40,6 +43,7 @@ const GamerModel: GamerModelType = {
     scriptsList: [],
     cluesList: [],
     roleId: null,
+    user: null,
   },
   effects: {
     *getGameInfo(_, { call, put }) {
@@ -78,6 +82,13 @@ const GamerModel: GamerModelType = {
         payload: roleId,
       });
     },
+    *getUser({}, { call, put }) {
+      const user = yield call(localforage.getItem, 'user');
+      yield put({
+        type: 'setUser',
+        payload: user,
+      });
+    },
   },
   reducers: {
     setGameInfo(state, action) {
@@ -95,9 +106,15 @@ const GamerModel: GamerModelType = {
     setRoleId(state, action) {
       state.roleId = action.payload;
     },
+    setUser(state, action) {
+      state.user = action.payload;
+    },
   },
   subscriptions: {
     setup({ dispatch }) {
+      dispatch({
+        type: 'getUser',
+      });
       dispatch({
         type: 'getRoleId',
       });

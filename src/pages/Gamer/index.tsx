@@ -3,30 +3,33 @@ import CluesPool from './components/CluesPool';
 import GameInfo from './components/GameInfo';
 import { Row, Col, Empty, message, notification } from 'antd';
 import { request, formatWSData } from '@/utils';
-import localforage from 'localforage';
 import { connect, useDispatch, Dispatch } from 'umi';
 import { GamerState } from '@/pages/models/gamer';
 import { TGameInfo } from '@/types';
 import EasterEgg from '@/components/EasterEgg';
 import { WS_MSG_TYPE } from '@/constants';
+import localforage from 'localforage';
 import React from 'react';
 const connector = ({ gamer }: { gamer: GamerState }) => {
   return {
     gameInfo: gamer.gameInfo,
+    user: gamer.user,
+    roleId: gamer.roleId,
   };
 };
 
 interface IGamer {
   gameInfo: TGameInfo | null;
+  user: string | null;
+  roleId: number | null;
   dispatch: Dispatch;
 }
 
 export const WSContext = createContext<WebSocket | null>(null);
 
-const Gamer: FC<IGamer> = ({ gameInfo, dispatch }) => {
+const Gamer: FC<IGamer> = ({ gameInfo, dispatch, user, roleId }) => {
   const ws = useRef<WebSocket | null>(null);
   const getCurrentGame = async () => {
-    const user = await localforage.getItem<string>('user');
     const data = await dispatch({
       type: 'gamer/getGameInfo',
     });
@@ -46,6 +49,16 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch }) => {
         type: 'gamer/setRolesList',
         payload: res.data,
       });
+      if (!roleId) {
+        let currentRole = res.data.find((item: any) => item.user === user);
+        console.log(currentRole);
+        if (currentRole) {
+          await localforage.setItem('roleId', currentRole.id);
+          dispatch({
+            type: 'gamer/getRoleId',
+          });
+        }
+      }
     }
   };
 
@@ -53,24 +66,22 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch }) => {
     getCurrentGame();
   }, []);
 
-  const getMyScript = async () => {
-    const roleId = await localforage.getItem<number>('roleId');
+  const getMyScript = async (gameId: number, rId: number) => {
+    console.log(gameInfo?.id);
     const res = await dispatch({
       type: 'gamer/getMyScript',
       payload: {
-        gameId: gameInfo?.id,
-        roleId,
+        gameId,
+        roleId: rId,
       },
     });
   };
 
   const handleWSMessage = async (msg: string) => {
-    const user = await localforage.getItem('user');
-    const roleId = await localforage.getItem<number>('roleId');
     const result = formatWSData(msg);
     switch (result.type) {
       case WS_MSG_TYPE.SET_NEXT_ROUND:
-        getCurrentGame();
+        await getCurrentGame();
         notification.info({
           message: '已开启下一轮',
         });
@@ -99,15 +110,15 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch }) => {
   };
 
   useEffect(() => {
-    if (gameInfo?.round && gameInfo?.round > -1) {
-      getMyScript();
+    if (gameInfo?.round && gameInfo?.round > -1 && roleId && gameInfo?.id) {
+      getMyScript(gameInfo.id, roleId);
     }
-  }, [gameInfo?.round]);
+  }, [gameInfo?.round, gameInfo?.id, roleId]);
 
   useEffect(() => {
     (async () => {
-      const user = await localforage.getItem('user');
-      ws.current = new WebSocket(`ws://192.168.189.128:8011/webSocket/${user}`);
+      const uu = await localforage.getItem('user');
+      ws.current = new WebSocket(`ws://192.168.189.128:8011/webSocket/${uu}`);
       ws.current.onopen = function () {
         console.log('websocket已打开');
       };

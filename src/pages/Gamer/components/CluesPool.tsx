@@ -51,7 +51,6 @@ const CluesPool: FC<TCluesPool> = ({ cluesList, roleId }) => {
   }, [cluesList]);
 
   useEffect(() => {
-    console.log(roleId);
     if (roleId) {
       getMyClues();
     }
@@ -65,18 +64,9 @@ const CluesPool: FC<TCluesPool> = ({ cluesList, roleId }) => {
         <Button onClick={getNewClues}>获取新线索</Button>
       </div>
       <h3>我的线索</h3>
-      <Row gutter={4}>
-        <Image.PreviewGroup>
-          {/* {myCluesList.map((item, index) => {
-            return (
-              <Col span={8} key={index}>
-                <Image width={'100%'} src={`./api/${item.images}`} />
-              </Col>
-            );
-          })} */}
-          <MyClues cluesList={myCluesList} />
-        </Image.PreviewGroup>
-      </Row>
+      <Image.PreviewGroup>
+        <MyClues cluesList={myCluesList} />
+      </Image.PreviewGroup>
       <h3>已分享线索</h3>
       <Image.PreviewGroup>
         <ShareClues cluesList={shareCluesList} />
