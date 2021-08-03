@@ -12,7 +12,7 @@ interface IClueInfo extends TClueInfo {
   actions?: React.ReactNode[] | undefined;
 }
 
-const ClueInfo: FC<IClueInfo> = ({ images, code, description, actions }) => {
+const ClueInfo: FC<IClueInfo> = ({ images, code, description, actions,location }) => {
   return (
     <Card hoverable cover={<Image src={`/api/${images}`} />} actions={actions}>
       <Meta title={code} description={description} />
