@@ -96,9 +96,30 @@ const GameTable: FC<any> = (props) => {
               </Button>
             </Popconfirm>
 
-            <Button size="small" key="edit">
+            {/* <Button size="small" key="edit">
               编辑
-            </Button>
+            </Button> */}
+            {record.status === 0 && (
+              <Popconfirm
+                title="确定要开启吗"
+                disabled={record.status !== 0}
+                onConfirm={() => handleStart(record.id)}
+              >
+                <Button size="small" key="start" type="primary">
+                  开启游戏
+                </Button>
+              </Popconfirm>
+            )}
+            {record.status === 1 && (
+              <Popconfirm
+                title="确定要完成吗"
+                onConfirm={() => handleFinish(record.id)}
+              >
+                <Button size="small" key="finish">
+                  完成游戏
+                </Button>
+              </Popconfirm>
+            )}
             <Button
               size="small"
               type="primary"
@@ -124,12 +145,24 @@ const GameTable: FC<any> = (props) => {
     const res = await request(`/game/delete/${gameId}`, {
       method: 'POST',
     });
-    if (res.code === 200) {
-      message.success('删除成功');
-      fetchList();
-    } else {
-      message.warn(res.msg);
-    }
+    message.success('删除成功');
+    fetchList();
+  };
+
+  const handleStart = async (gameId: number) => {
+    const res = await request(`/game/start/${gameId}`, {
+      method: 'POST',
+    });
+    message.success('开启成功');
+    fetchList();
+  };
+
+  const handleFinish = async (gameId: number) => {
+    const res = await request(`/game/finish/${gameId}`, {
+      method: 'POST',
+    });
+    message.success('完成成功');
+    fetchList();
   };
 
   const fetchList = async () => {
@@ -144,7 +177,7 @@ const GameTable: FC<any> = (props) => {
     fetchList();
   }, []);
   return (
-    <div>
+    <div style={{ padding: '10px' }}>
       <div className={style['table-toolbar']}>
         <div>
           <Space>
