@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, createContext, useRef } from 'react';
 import { connect, useDispatch } from 'umi';
-import { request } from '@/utils';
+import { request, formatWSData } from '@/utils';
 import { GamerState } from '@/pages/models/gamer';
 import { message, Row, Col, Empty } from 'antd';
 
@@ -9,6 +9,7 @@ import GameControl from './components/GameControl';
 import Handbook from './components/Handbook';
 import GameStatistic from './components/GameStatistic';
 import GameIntro from '@/components/GameIntro';
+import { WS_MSG_TYPE } from '@/constants';
 
 interface IDM extends GamerState {}
 export const WSContext = createContext<WebSocket | null>(null);
@@ -20,6 +21,17 @@ const connector = ({ gamer }: { gamer: GamerState }) => {
 const DM: FC<IDM> = ({ gameInfo }) => {
   const dispatch = useDispatch();
   const ws = useRef<WebSocket | null>(null);
+  const handleWSMessage = (msg: string) => {
+    const result = formatWSData(msg);
+    switch (result.type) {
+      case WS_MSG_TYPE.VOTE:
+        dispatch({
+          type: 'dm/setVoteResult',
+          payload: result,
+        });
+        break;
+    }
+  };
   useEffect(() => {
     ws.current = new WebSocket(`ws://192.168.189.128:8011/webSocket/admin`);
     ws.current.onopen = function () {
@@ -29,8 +41,12 @@ const DM: FC<IDM> = ({ gameInfo }) => {
     ws.current.onmessage = function (msg) {
       var serverMsg = '收到服务端信息：' + msg.data;
       console.log(serverMsg);
+      if (msg.data === '连接成功') {
+        return;
+      }
+      handleWSMessage(msg.data);
     };
-  });
+  }, []);
   const getRoles = async (gameId: number) => {
     const res = await request(`/roles/list?gameId=${gameId}`);
     console.log(res);

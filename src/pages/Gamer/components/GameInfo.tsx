@@ -17,7 +17,7 @@ const connector = ({ gamer }: { gamer: GamerState }) => {
 
 type TGameInfo = Pick<GamerState, 'gameInfo' | 'rolesList'>;
 
-const GameInfo: FC<TGameInfo> = ({ gameInfo, rolesList }) => {
+const GameInfo: FC<TGameInfo> = ({ gameInfo, rolesList = [] }) => {
   const dispatch = useDispatch();
   const initMyRole = async () => {
     const user = await localforage.getItem('user');

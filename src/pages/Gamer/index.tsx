@@ -9,7 +9,7 @@ import { TGameInfo } from '@/types';
 import EasterEgg from '@/components/EasterEgg';
 import { WS_MSG_TYPE } from '@/constants';
 import localforage from 'localforage';
-import React from 'react';
+import VoteDrawer from './components/VoteDrawer';
 const connector = ({ gamer }: { gamer: GamerState }) => {
   return {
     gameInfo: gamer.gameInfo,
@@ -104,6 +104,11 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch, user, roleId }) => {
           },
         });
         break;
+      case WS_MSG_TYPE.START_VOTE:
+        localforage.setItem('voteItem',result.data)
+        await dispatch({
+          type: 'gamer/getGameInfo',
+        });
       default:
         break;
     }
@@ -144,6 +149,7 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch, user, roleId }) => {
               <GameInfo />
             </Col>
           </Row>
+          <VoteDrawer />
         </WSContext.Provider>
       ) : (
         <Empty description="当前没有开始剧本杀" />

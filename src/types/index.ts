@@ -58,8 +58,9 @@ export type TRequestResult = {
   data?: any;
 };
 
-export type TWSResult = {
+export type TWSData = {
   type: WS_MSG_TYPE;
   from?: String;
+  to?: String;
   data?: any;
 };

@@ -4,7 +4,7 @@ import { connect, ConnectProps, useDispatch } from 'umi';
 import { request } from '@/utils';
 import { GamerState } from '@/pages/models/gamer';
 import { TGameInfo } from '@/types';
-
+import VoteButton from './VoteButton';
 interface IControl {
   gameInfo: TGameInfo | null;
 }
@@ -47,6 +47,8 @@ const Control: FC<IControl> = ({ gameInfo }) => {
         >
           <Button>{gameInfo?.cluesEnable ? '关闭' : '开启'}线索</Button>
         </Popconfirm>
+
+        <VoteButton gameId={gameInfo?.id} />
       </Space>
     </div>
   );
