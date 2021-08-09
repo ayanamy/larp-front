@@ -5,6 +5,7 @@ import { MenuInfo } from 'rc-menu/lib/interface';
 import { GamerState } from '@/pages/models/gamer';
 import localForage from 'localforage';
 import { confirm } from '@/utils/common';
+import Logo from '@/components/Logo';
 type TPageHeader = {
   user: string | null;
 };
@@ -32,11 +33,14 @@ const PageHeader: FC<TPageHeader> = ({ user = '' }) => {
     <div
       style={{
         display: 'flex',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         color: '#fff',
         fontSize: '1.5em',
       }}
     >
+      <Logo style={{ fontSize: '20px' }} />
+
       <Space size="large">
         <div>本期主持人:张三</div>
         <Dropdown overlay={UserDropdownMenu}>

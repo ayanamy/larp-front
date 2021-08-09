@@ -19,6 +19,7 @@ const connector = ({ gamer }: { gamer: GamerState }) => {
 
 const VoteDrawer: FC<TVoteDrawer> = ({ gameInfo, rolesList, user }) => {
   const [voteItems, setVoteItems] = useState<any>([]);
+  const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const ws = useContext(WSContext);
   useEffect(() => {
@@ -26,6 +27,7 @@ const VoteDrawer: FC<TVoteDrawer> = ({ gameInfo, rolesList, user }) => {
       if (gameInfo?.round === 999) {
         const voteItem = await localforage.getItem('voteItem');
         setVoteItems(voteItem || []);
+        setVisible(true);
       }
     })();
   }, [gameInfo?.round]);
@@ -40,7 +42,13 @@ const VoteDrawer: FC<TVoteDrawer> = ({ gameInfo, rolesList, user }) => {
     ws?.send(buildWsData(sendObj));
   };
   return (
-    <Drawer visible={gameInfo?.round === 999} width={300}>
+    <Drawer
+      visible={visible}
+      width={300}
+      onClose={() => {
+        setVisible(false);
+      }}
+    >
       <Divider />
       <Form form={form} size="small">
         {voteItems.map((item: any, index: number) => (

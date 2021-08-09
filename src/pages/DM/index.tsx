@@ -10,7 +10,6 @@ import Handbook from './components/Handbook';
 import GameStatistic from './components/GameStatistic';
 import GameIntro from '@/components/GameIntro';
 import { WS_MSG_TYPE } from '@/constants';
-
 interface IDM extends GamerState {}
 export const WSContext = createContext<WebSocket | null>(null);
 const connector = ({ gamer }: { gamer: GamerState }) => {
@@ -86,7 +85,7 @@ const DM: FC<IDM> = ({ gameInfo }) => {
             style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
           >
             <GameStatistic />
-            <GameControl />
+            {/* <GameControl /> */}
           </Col>
           <Col
             span={10}

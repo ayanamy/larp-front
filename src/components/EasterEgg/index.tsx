@@ -20,7 +20,7 @@ const EasterEgg: FC<TEasterEgg> = () => {
   return (
     <div className={style.egg}>
       <BugOutlined
-        style={{ cursor: 'pointer', color: 'azure' }}
+        style={{ cursor: 'pointer', color: 'rgb(0, 32, 64)' }}
         onClick={handleClick}
       />
     </div>

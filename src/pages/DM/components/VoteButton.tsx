@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { Form, Modal, Input, Button, Space, Checkbox, message } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { request } from '@/utils';
+import localforage from 'localforage';
 type TVoteButton = {
   gameId?: number;
 };
@@ -10,13 +11,13 @@ const VoteButton: FC<TVoteButton> = ({ gameId }) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const handleVote = async () => {
-    console.log(form.getFieldsValue());
     let { voteItem } = await form.validateFields();
     if (voteItem.length === 0) {
       message.warn('至少选一项投票');
       return false;
     }
     voteItem = voteItem.map(({ text }: { text: string }) => text);
+    await localforage.setItem('voteItem', voteItem);
     await request(`/dm/startVote/${gameId}`, {
       method: 'POST',
       params: { voteItem },

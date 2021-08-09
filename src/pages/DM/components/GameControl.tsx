@@ -5,6 +5,8 @@ import { request } from '@/utils';
 import { GamerState } from '@/pages/models/gamer';
 import { TGameInfo } from '@/types';
 import VoteButton from './VoteButton';
+import ResultButton from './ResultButton';
+import FootButtons from '@/components/FootButtons';
 interface IControl {
   gameInfo: TGameInfo | null;
 }
@@ -35,7 +37,7 @@ const Control: FC<IControl> = ({ gameInfo }) => {
   };
 
   return (
-    <div>
+    <FootButtons>
       <Space>
         <Popconfirm title="确定要进入下一状态吗？" onConfirm={handleNext}>
           <Button>进入下一状态</Button>
@@ -49,8 +51,9 @@ const Control: FC<IControl> = ({ gameInfo }) => {
         </Popconfirm>
 
         <VoteButton gameId={gameInfo?.id} />
+        <ResultButton />
       </Space>
-    </div>
+    </FootButtons>
   );
 };
 
