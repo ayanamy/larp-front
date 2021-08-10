@@ -91,14 +91,14 @@ const DM: FC<IDM> = ({ gameInfo }) => {
             span={10}
             style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
           >
-            <div style={{ height: '200px', overflow: 'auto' }}>
+            {/* <div style={{ height: '200px', overflow: 'auto' }}>
               <GameIntro
                 gameName={gameInfo.gameName ?? ''}
                 description={gameInfo.description || ''}
               />
-            </div>
+            </div> */}
             <div style={{ height: '300px', overflow: 'auto' }}>
-              <RolesControl />
+              <RolesControl  />
             </div>
             <div style={{ height: 'calc(100% - 500px)', overflow: 'auto' }}>
               <Handbook />

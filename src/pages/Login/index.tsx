@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { history } from 'umi';
@@ -13,15 +14,40 @@ const Login = () => {
     });
     if (res.code === 200) {
       await localforage.setItem('user', values?.name);
-      history.push('/gamer');
+      await localforage.setItem('userRole', res?.data.role);
+      redirect(res?.data.role);
     } else {
       message.warn(res.msg);
     }
   };
   const forgetPassword = () => {
     const user = form.getFieldValue('name');
-    message.info(`update users set password = '111111' where user='${user}'   请！`);
+    message.info(
+      `update users set password = '111111' where user='${user}'   请！`,
+    );
   };
+
+  const redirect = (role: number) => {
+    switch (role) {
+      case 0:
+        history.push('/gamer');
+        break;
+      case 1:
+        history.push('/admin');
+        break;
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const user = await localforage.getItem('user');
+      const userRole = await localforage.getItem<number>('userRole');
+      console.log(user, userRole);
+      if (user && userRole) {
+        redirect(userRole);
+      }
+    })();
+  }, []);
   return (
     <div id="login-wrap">
       <Form

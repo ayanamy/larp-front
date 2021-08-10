@@ -27,7 +27,7 @@ const GameModal: FC<TGameModal> = ({
   const [form] = Form.useForm();
   const [scripts, setScripts] = useState<any[]>([]);
   const [clues, setClues] = useState<any[]>([]);
-
+  const [handbooks, setHandbooks] = useState<any[]>([])
   useEffect(() => {
     (async () => {
       if (visible) {
@@ -71,6 +71,9 @@ const GameModal: FC<TGameModal> = ({
       }
       for (const clue of clues) {
         formData.append('clues', clue);
+      }
+      for (const handbook of handbooks) {
+        formData.append('handbook', handbook);
       }
       const res = await request('/game/create', {
         method: 'POST',
@@ -172,6 +175,25 @@ const GameModal: FC<TGameModal> = ({
             }}
           >
             {clues.length > 0 ? (
+              <FileDoneOutlined
+                style={{ color: '#447CE6', fontSize: '24px' }}
+              />
+            ) : (
+              <FileAddFilled style={{ color: '#447CE6', fontSize: '24px' }} />
+            )}
+          </Dragger>
+        </FormItem>
+
+        <FormItem label="导入组织者手册">
+          <Dragger
+            directory
+            fileList={handbooks}
+            showUploadList={false}
+            beforeUpload={(file, fileList) => {
+              setHandbooks(fileList);
+            }}
+          >
+            {handbooks.length > 0 ? (
               <FileDoneOutlined
                 style={{ color: '#447CE6', fontSize: '24px' }}
               />

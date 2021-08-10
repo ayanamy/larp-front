@@ -6,6 +6,8 @@ import { GamerState } from '@/pages/models/gamer';
 import localForage from 'localforage';
 import { confirm } from '@/utils/common';
 import Logo from '@/components/Logo';
+import { request } from '@/utils';
+
 type TPageHeader = {
   user: string | null;
 };
@@ -28,6 +30,19 @@ const PageHeader: FC<TPageHeader> = ({ user = '' }) => {
       <Menu.Item key="logout">退出</Menu.Item>
     </Menu>
   );
+  const [adminUser, setadminUser] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      const res = await request('/users/getList');
+      const adminUser = res.data.find(
+        ({ role }: { role: number }) => role === 1,
+      );
+      if (adminUser) {
+        setadminUser(adminUser.name);
+      }
+    })();
+  }, []);
 
   return (
     <div
@@ -39,10 +54,9 @@ const PageHeader: FC<TPageHeader> = ({ user = '' }) => {
         fontSize: '1.5em',
       }}
     >
-      <Logo style={{ fontSize: '20px' }} />
-
+      <Logo style={{ fontSize: '30px' }} />
+      <div>本期主持人 : {adminUser}</div>
       <Space size="large">
-        <div>本期主持人:张三</div>
         <Dropdown overlay={UserDropdownMenu}>
           <div>{user}</div>
         </Dropdown>

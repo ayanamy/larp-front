@@ -3,7 +3,8 @@ import GameModal from '../GameModal';
 import DetailModal from '../DetailModal';
 import { Table, Button, Space, Popconfirm, message } from 'antd';
 import { ColumnType } from 'antd/es/table';
-import { request } from '@/utils';
+import { request, confirm } from '@/utils';
+import { history } from 'umi';
 import {
   EditOutlined,
   FileDoneOutlined,
@@ -129,7 +130,7 @@ const GameTable: FC<any> = (props) => {
                 setDetailModalVisible(true);
               }}
             >
-              剧本和线索
+              初始化
             </Button>
           </Space>
         );
@@ -154,7 +155,9 @@ const GameTable: FC<any> = (props) => {
       method: 'POST',
     });
     message.success('开启成功');
-    fetchList();
+    await fetchList();
+    await confirm('游戏已开启，是否前往');
+    history.push('/dm');
   };
 
   const handleFinish = async (gameId: number) => {

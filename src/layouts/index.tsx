@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { history, Helmet, useLocation } from 'umi';
 import localForage from 'localforage';
 import { Layout } from 'antd';
@@ -7,7 +7,6 @@ const { Header, Footer, Sider, Content } = Layout;
 import PageHeader from './components/PageHeader';
 import PageFooter from './components/PageFooter';
 const CommonLayoyt: React.FC = ({ children }) => {
-  const location = useLocation();
   useEffect(() => {
     (async () => {
       const user = await localForage.getItem('user');
@@ -18,13 +17,15 @@ const CommonLayoyt: React.FC = ({ children }) => {
     })();
   }, []);
 
+
+
   return (
     <>
       <Helmet>
         <title>剧本杀</title>
       </Helmet>
       <Layout style={{ height: '100%' }}>
-        <Header style={{ height: '50px' }}>
+        <Header style={{ height: '50px', lineHeight: '50px' }}>
           <PageHeader />
         </Header>
         <Content

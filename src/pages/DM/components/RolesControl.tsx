@@ -12,7 +12,7 @@ const connector = ({ gamer }: { gamer: GamerState }) => {
 const RolesControl: FC<TRolesControl> = ({ rolesList }) => {
   return (
     <div>
-      <RolesList rolesList={rolesList} />
+      <RolesList type="avatar" rolesList={rolesList} />
     </div>
   );
 };

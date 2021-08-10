@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { connect } from 'umi';
 import { GamerState } from '@/pages/models/gamer';
 import { Image, Row, Col } from 'antd';
+import { request } from '@/utils';
 type THandbook = Pick<GamerState, 'gameInfo'>;
 
 const connector = ({ gamer }: { gamer: GamerState }) => {
@@ -10,6 +11,14 @@ const connector = ({ gamer }: { gamer: GamerState }) => {
   };
 };
 const Handbook: FC<THandbook> = ({ gameInfo }) => {
+  useEffect(() => {
+    (async () => {
+      if (gameInfo?.id) {
+        const res = request(`/dm/getHandBook/${gameInfo.id}`);
+        console.log(data)
+      }
+    })();
+  }, [gameInfo?.id]);
   return (
     <Image.PreviewGroup>
       <Row gutter={4}>

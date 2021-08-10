@@ -5,11 +5,11 @@ export default defineConfig({
   },
   routes: [
     { path: '/login', component: '@/pages/Login' },
+    { path: '/', component: '@/pages/index', redirect: '/login' },
     {
       path: '/',
       component: '@/layouts',
       routes: [
-        { path: '/', component: '@/pages/index' },
         { path: '/gamer', component: '@/pages/Gamer' },
         { path: '/admin', component: '@/pages/Admin' },
         { path: '/dm', component: '@/pages/DM' },
