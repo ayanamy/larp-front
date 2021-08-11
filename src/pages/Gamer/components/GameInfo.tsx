@@ -1,5 +1,15 @@
 import { useEffect, useState, FC } from 'react';
-import { Row, Col, Image, Tabs, List, Avatar, Button, message } from 'antd';
+import {
+  Row,
+  Col,
+  Image,
+  Tabs,
+  List,
+  Avatar,
+  Button,
+  message,
+  Card,
+} from 'antd';
 import { connect, ConnectProps, useDispatch } from 'umi';
 import { request } from '@/utils';
 const { TabPane } = Tabs;

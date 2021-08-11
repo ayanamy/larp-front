@@ -11,21 +11,23 @@ const connector = ({ gamer }: { gamer: GamerState }) => {
   };
 };
 const Handbook: FC<THandbook> = ({ gameInfo }) => {
+  const [handbooks, setHandbooks] = useState<string[]>([])
   useEffect(() => {
     (async () => {
       if (gameInfo?.id) {
-        const res = request(`/dm/getHandBook/${gameInfo.id}`);
-        console.log(data)
+        const res = await request(`/dm/getHandBook/${gameInfo.id}`);
+        console.log(res);
+        setHandbooks(res?.data as string[]);
       }
     })();
   }, [gameInfo?.id]);
   return (
     <Image.PreviewGroup>
       <Row gutter={4}>
-        {new Array(10).fill(0).map((item, index) => {
+        {handbooks.map((item, index) => {
           return (
             <Col span={4} key={index}>
-              <Image src={`./api/组织者手册/${index + 1}.jpg`} />
+              <Image src={`./api/${item}`} />
             </Col>
           );
         })}

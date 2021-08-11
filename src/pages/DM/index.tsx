@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, createContext, useRef } from 'react';
 import { connect, useDispatch } from 'umi';
 import { request, formatWSData } from '@/utils';
 import { GamerState } from '@/pages/models/gamer';
-import { message, Row, Col, Empty } from 'antd';
+import { message, Row, Col, Empty, Card } from 'antd';
 
 import RolesControl from './components/RolesControl';
 import GameControl from './components/GameControl';
@@ -98,7 +98,7 @@ const DM: FC<IDM> = ({ gameInfo }) => {
               />
             </div> */}
             <div style={{ height: '300px', overflow: 'auto' }}>
-              <RolesControl  />
+              <RolesControl />
             </div>
             <div style={{ height: 'calc(100% - 500px)', overflow: 'auto' }}>
               <Handbook />
