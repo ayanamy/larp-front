@@ -84,7 +84,9 @@ const DM: FC<IDM> = ({ gameInfo }) => {
             span={14}
             style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
           >
-            <GameStatistic />
+            <Card>
+              <GameStatistic />
+            </Card>
             {/* <GameControl /> */}
           </Col>
           <Col
@@ -98,10 +100,14 @@ const DM: FC<IDM> = ({ gameInfo }) => {
               />
             </div> */}
             <div style={{ height: '300px', overflow: 'auto' }}>
-              <RolesControl />
+              <Card>
+                <RolesControl />
+              </Card>
             </div>
             <div style={{ height: 'calc(100% - 500px)', overflow: 'auto' }}>
-              <Handbook />
+              <Card>
+                <Handbook />
+              </Card>
             </div>
           </Col>
         </Row>

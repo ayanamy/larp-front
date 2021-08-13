@@ -1,18 +1,37 @@
 #login-wrap {
   height: 100%;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  filter: blur(7px);
+  background-size: cover;
+  background-color: #043dac;
 }
 
-.login-form {
-  max-width: 300px;
-}
-.login-form-forgot {
-  float: right;
-}
-
-.login-form-button {
-  width: 100%;
+.form-content {
+  position: absolute;
+  left: 50%;
+  top: 150px;
+  transform: translateX(-50%);
+  .login-form {
+    max-width: 400px;
+    color: beige;
+    .ant-form-item-control-input{
+      width: 300px;
+    }
+  }
+  .login-form-forgot {
+    text-align: right;
+    .ant-btn {
+      color: beige;
+    }
+  }
+  .title {
+    text-align: center;
+    color: beige;
+  }
+  .login-form-button {
+    width: 100%;
+  }
+  .ant-form-item {
+    // margin-bottom: 12px;
+  }
 }

@@ -19,12 +19,12 @@ const RolesList: FC<TRolesList> = ({
     <Row gutter={8}>
       {rolesList.map((item) => {
         return (
-          <Col span={size === 'large' ? 6 : 4} key={item.id}>
-            {type === 'card' ? (
+          <Col flex={1} key={item.id}>
+            {/* {type === 'card' ? (
               <Card
                 hoverable
                 style={{ width: '100%' }}
-                cover={<Image src={require(`@/static/1.jpg`)} />}
+                cover={<Image src={'./api/images/1.jpg'} />}
               >
                 <Meta
                   title={`${item?.roleName}(${item?.user})`}
@@ -35,7 +35,7 @@ const RolesList: FC<TRolesList> = ({
               <>
                 <Avatar
                   size={100}
-                  src={<Image src={require(`@/static/1.jpg`)} />}
+                  src={<Image src={'./api/images/1.jpg'} />}
                 />
                 <Row>
                   <Text>{`${item?.roleName}(${item?.user})`}</Text>
@@ -44,7 +44,14 @@ const RolesList: FC<TRolesList> = ({
                   <Text type="secondary">{item?.description}</Text>
                 </Row>
               </>
-            )}
+            )} */}
+            <Avatar size={100} src={<Image src={'./api/images/1.jpg'} />} />
+            <Row>
+              <Text>{`${item?.roleName}(${item?.user})`}</Text>
+            </Row>
+            <Row>
+              <Text type="secondary">{item?.description}</Text>
+            </Row>
           </Col>
         );
       })}

@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import { Form, Input, Button, Checkbox, message } from 'antd';
+import { Form, Input, Button, Checkbox, message, Modal } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import { request } from '@/utils';
 import localforage from 'localforage';
+import bg from './bg';
 import './style.less';
 const Login = () => {
   const [form] = Form.useForm();
@@ -22,9 +23,14 @@ const Login = () => {
   };
   const forgetPassword = () => {
     const user = form.getFieldValue('name');
-    message.info(
-      `update users set password = '111111' where user='${user}'   请！`,
-    );
+    Modal.info({
+      title: '自己搞定',
+      content: (
+        <div>{`update users set password = '111111' where user='${
+          user || ''
+        }'`}</div>
+      ),
+    });
   };
 
   const redirect = (role: number) => {
@@ -49,46 +55,51 @@ const Login = () => {
     })();
   }, []);
   return (
-    <div id="login-wrap">
-      <Form
-        form={form}
-        name="normal_login"
-        className="login-form"
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-      >
-        <Form.Item name="name" rules={[{ required: true, message: '必填' }]}>
-          <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="账号"
-          />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: '必填' }]}
+    <>
+      <div id="login-wrap" style={{ backgroundImage: `url(${bg})` }}></div>
+      <div className="form-content">
+        <Form
+          form={form}
+          name="normal_login"
+          className="login-form"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
         >
-          <Input
-            prefix={<LockOutlined className="site-form-item-icon" />}
-            type="password"
-            placeholder="密码"
-          />
-        </Form.Item>
-        <Form.Item>
-          <Button type="text" size="small" onClick={forgetPassword}>
-            忘记密码
-          </Button>
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
+          <h1 className="title">欢迎来到剧本杀</h1>
+          <Form.Item name="name" rules={[{ required: true, message: '必填' }]}>
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="账号"
+            />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: '必填' }]}
           >
-            登录
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
+            <Input
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="密码"
+            />
+          </Form.Item>
+          <div className="login-form-forgot">
+            <Button type="text" size="small" onClick={forgetPassword}>
+              忘记密码
+            </Button>
+          </div>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              className="login-form-button"
+            >
+              登录
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </>
   );
 };
 

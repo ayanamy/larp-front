@@ -26,7 +26,7 @@ const GameStatistic: FC<TGameStatistic> = ({ gameInfo }) => {
       <Col span={8}>
         <Statistic
           title="线索开关"
-          value={gameInfo?.cluesEnable ? '开启' : '关闭'}
+          value={gameInfo?.cluesEnable ? '已开启' : '已关闭'}
         />
       </Col>
       <Col span={8}>

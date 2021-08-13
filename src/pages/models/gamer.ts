@@ -21,7 +21,6 @@ export interface GamerModelType {
     getRolesList: Effect;
     getMyScript: Effect;
     getMyClues: Effect;
-    getRoleId: Effect;
     getUser: Effect;
   };
   reducers: {
@@ -47,19 +46,30 @@ const GamerModel: GamerModelType = {
   },
   effects: {
     *getGameInfo(_, { call, put }) {
-      const res = yield call(getGameInfo);
+      const res: { data: TGameInfo } = yield call(getGameInfo);
       yield put({
         type: 'setGameInfo',
         payload: res.data,
       });
       return res.data;
     },
-    *getRolesList({ payload }, { call, put }) {
-      const res = yield call(getRolesList, payload);
+    *getRolesList({ payload }, { call, put, select }) {
+      const res: { data: TRoleInfo[] } = yield call(getRolesList, payload);
+      const user = yield select((state: GamerState) => state.user);
+
       yield put({
         type: 'setRolesList',
         payload: res.data,
       });
+      const currentRole = res.data.find((item) => {
+        item.user === user;
+      });
+      if (currentRole) {
+        yield put({
+          type: 'setRoleId',
+          payload: currentRole.id,
+        });
+      }
     },
     *getMyScript({ payload }, { call, put }) {
       const res = yield call(getMyScript, payload);
@@ -73,13 +83,6 @@ const GamerModel: GamerModelType = {
       yield put({
         type: 'setCluesList',
         payload: res.data,
-      });
-    },
-    *getRoleId({}, { call, put }) {
-      const roleId = yield call(localforage.getItem, 'roleId');
-      yield put({
-        type: 'setRoleId',
-        payload: roleId,
       });
     },
     *getUser({}, { call, put }) {
@@ -114,9 +117,6 @@ const GamerModel: GamerModelType = {
     setup({ dispatch }) {
       dispatch({
         type: 'getUser',
-      });
-      dispatch({
-        type: 'getRoleId',
       });
     },
   },

@@ -1,7 +1,7 @@
 import { useEffect, FC, useRef, createContext } from 'react';
 import CluesPool from './components/CluesPool';
 import GameInfo from './components/GameInfo';
-import { Row, Col, Empty, message, notification } from 'antd';
+import { Row, Col, Empty, message, notification, Button } from 'antd';
 import { request, formatWSData } from '@/utils';
 import { connect, useDispatch, Dispatch } from 'umi';
 import { GamerState } from '@/pages/models/gamer';
@@ -10,32 +10,46 @@ import EasterEgg from '@/components/EasterEgg';
 import { WS_MSG_TYPE } from '@/constants';
 import localforage from 'localforage';
 import VoteDrawer from './components/VoteDrawer';
+import RolesList from '@/components/RolesList';
 const connector = ({ gamer }: { gamer: GamerState }) => {
   return {
     gameInfo: gamer.gameInfo,
     user: gamer.user,
     roleId: gamer.roleId,
+    rolesList: gamer.rolesList,
   };
 };
 
-interface IGamer {
-  gameInfo: TGameInfo | null;
-  user: string | null;
-  roleId: number | null;
-  dispatch: Dispatch;
-}
+type TGamer = Pick<GamerState, 'gameInfo' | 'roleId' | 'user' | 'rolesList'>;
 
 export const WSContext = createContext<WebSocket | null>(null);
 
-const Gamer: FC<IGamer> = ({ gameInfo, dispatch, user, roleId }) => {
+const Gamer: FC<TGamer> = ({ gameInfo, user, roleId, rolesList }) => {
   const ws = useRef<WebSocket | null>(null);
+  const dispatch = useDispatch();
   const getCurrentGame = async () => {
     const data = await dispatch({
       type: 'gamer/getGameInfo',
     });
     getRoles(data?.id, user!);
   };
-
+  const initMyRole = async () => {
+    const user = await localforage.getItem('user');
+    const res = await request(`/game/initMyRole/${gameInfo?.id}`, {
+      method: 'POST',
+      params: {
+        user,
+      },
+    });
+    dispatch({
+      type: 'gamer/getRolesList',
+      payload: {
+        gameId: gameInfo?.id,
+        user,
+      },
+    });
+    message.success('初始化成功');
+  };
   const getRoles = async (gameId: number, user: string) => {
     const res = await request(`/roles/list`, {
       method: 'GET',
@@ -51,9 +65,7 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch, user, roleId }) => {
       });
       if (!roleId) {
         let currentRole = res.data.find((item: any) => item.user === user);
-        console.log(currentRole);
         if (currentRole) {
-          await localforage.setItem('roleId', currentRole.id);
           dispatch({
             type: 'gamer/getRoleId',
           });
@@ -105,7 +117,7 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch, user, roleId }) => {
         });
         break;
       case WS_MSG_TYPE.START_VOTE:
-        localforage.setItem('voteItem',result.data)
+        localforage.setItem('voteItem', result.data);
         await dispatch({
           type: 'gamer/getGameInfo',
         });
@@ -143,6 +155,10 @@ const Gamer: FC<IGamer> = ({ gameInfo, dispatch, user, roleId }) => {
         <WSContext.Provider value={ws.current}>
           <Row style={{ height: '100%' }}>
             <Col span="14">
+              {rolesList.length === 0 && (
+                <Button onClick={initMyRole}>随机我的角色</Button>
+              )}
+              <RolesList rolesList={rolesList} />
               <CluesPool />
             </Col>
             <Col span="10" style={{ height: '100%' }}>
