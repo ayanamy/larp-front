@@ -19,7 +19,7 @@ export default defineConfig({
   mfsu: {},
   dva: {
     immer: true,
-    disableModelsReExport: true,
+    disableModelsReExport: false,
     lazyLoad: true,
   },
   fastRefresh: {},

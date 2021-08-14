@@ -1,14 +1,16 @@
 import React, { FC, useState, useEffect } from 'react';
 import { TClueInfo } from '@/types';
-import { Row, Col, Button, Popconfirm } from 'antd';
+import { Row, Col, Button, Popconfirm, message } from 'antd';
 import ClueInfo from '@/components/ClueInfo';
 import localforage from 'localforage';
-
+import { useDispatch } from 'umi';
 import { request } from '@/utils';
 type TMyClues = {
   cluesList: TClueInfo[];
+  roleId: number;
 };
-const MyClues: FC<TMyClues> = ({ cluesList }) => {
+const MyClues: FC<TMyClues> = ({ cluesList, roleId }) => {
+  const dispatch = useDispatch();
   const shareClue = async (clueId: number) => {
     const user = await localforage.getItem('user');
     await request('/clues/share', {
@@ -16,6 +18,13 @@ const MyClues: FC<TMyClues> = ({ cluesList }) => {
       params: {
         user,
         clueId,
+      },
+    });
+    message.success('分享成功');
+    dispatch({
+      type: 'gamer/getMyClues',
+      payload: {
+        roleId,
       },
     });
   };

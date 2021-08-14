@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { connect, useDispatch, history } from 'umi';
 import { Dropdown, Menu, Space } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import { GamerState } from '@/pages/models/gamer';
+import { IGamerState } from 'umi';
 import localForage from 'localforage';
 import { confirm } from '@/utils/common';
 import Logo from '@/components/Logo';
@@ -11,7 +11,7 @@ import { request } from '@/utils';
 type TPageHeader = {
   user: string | null;
 };
-const connector = ({ gamer }: { gamer: GamerState }) => {
+const connector = ({ gamer }: { gamer: IGamerState }) => {
   return {
     user: gamer.user,
   };

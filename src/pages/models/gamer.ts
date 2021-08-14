@@ -3,19 +3,26 @@ import localforage from 'localforage';
 
 import type { TGameInfo, TRoleInfo, TClueInfo, TScriptInfo } from '@/types';
 
-import { getGameInfo, getRolesList, getMyScript, getMyClues } from '@/api';
-export interface GamerState {
+import {
+  getGameInfo,
+  getRolesList,
+  getMyScript,
+  getMyClues,
+  getLocation,
+} from '@/api';
+export interface IGamerState {
   gameInfo: TGameInfo | null;
   rolesList: TRoleInfo[];
   scriptsList: TScriptInfo[];
   cluesList: TClueInfo[];
   roleId: number | null;
   user: string | null;
+  cluesLocation: string[];
 }
 
 export interface GamerModelType {
   namespace: 'gamer';
-  state: GamerState;
+  state: IGamerState;
   effects: {
     getGameInfo: Effect;
     getRolesList: Effect;
@@ -24,12 +31,13 @@ export interface GamerModelType {
     getUser: Effect;
   };
   reducers: {
-    setGameInfo: ImmerReducer<GamerState>;
-    setRolesList: ImmerReducer<GamerState>;
-    setScriptsList: ImmerReducer<GamerState>;
-    setCluesList: ImmerReducer<GamerState>;
-    setRoleId: ImmerReducer<GamerState>;
-    setUser: ImmerReducer<GamerState>;
+    setGameInfo: ImmerReducer<IGamerState>;
+    setRolesList: ImmerReducer<IGamerState>;
+    setScriptsList: ImmerReducer<IGamerState>;
+    setCluesList: ImmerReducer<IGamerState>;
+    setRoleId: ImmerReducer<IGamerState>;
+    setUser: ImmerReducer<IGamerState>;
+    setCluesLocation: ImmerReducer<IGamerState>;
   };
   subscriptions: { setup: Subscription };
 }
@@ -43,27 +51,39 @@ const GamerModel: GamerModelType = {
     cluesList: [],
     roleId: null,
     user: null,
+    cluesLocation: [],
   },
   effects: {
     *getGameInfo(_, { call, put }) {
-      const res: { data: TGameInfo } = yield call(getGameInfo);
+      const { data }: { data: TGameInfo } = yield call(getGameInfo);
       yield put({
         type: 'setGameInfo',
-        payload: res.data,
+        payload: data,
       });
-      return res.data;
+      if (data.round && data.round > 0 && data.round < 999) {
+        const locations = yield call(getLocation, {
+          gameId: data.id,
+          round: data.round,
+        });
+        yield put({
+          type: 'setCluesLocation',
+          payload: locations.data.map(
+            ({ location }: { location: string }) => location,
+          ),
+        });
+      }
+      return data;
     },
     *getRolesList({ payload }, { call, put, select }) {
       const res: { data: TRoleInfo[] } = yield call(getRolesList, payload);
-      const user = yield select((state: GamerState) => state.user);
-
+      const user = yield select(
+        ({ gamer }: { gamer: IGamerState }) => gamer.user,
+      );
       yield put({
         type: 'setRolesList',
         payload: res.data,
       });
-      const currentRole = res.data.find((item) => {
-        item.user === user;
-      });
+      const currentRole = res.data.find((item) => item.user === user);
       if (currentRole) {
         yield put({
           type: 'setRoleId',
@@ -111,6 +131,9 @@ const GamerModel: GamerModelType = {
     },
     setUser(state, action) {
       state.user = action.payload;
+    },
+    setCluesLocation(state, action) {
+      state.cluesLocation = action.payload;
     },
   },
   subscriptions: {

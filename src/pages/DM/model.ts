@@ -1,15 +1,15 @@
 import { ImmerReducer, Effect } from 'umi';
 import { TWSData } from '@/types';
-export interface DMState {
+export interface IDMState {
   voteResult: TWSData[];
 }
 
 export interface DMModelType {
   namespace: 'dm';
-  state: DMState;
+  state: IDMState;
 
   reducers: {
-    setVoteResult: ImmerReducer<DMState>;
+    setVoteResult: ImmerReducer<IDMState>;
   };
 }
 

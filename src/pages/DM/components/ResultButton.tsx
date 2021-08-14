@@ -1,13 +1,11 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Form, Modal, Input, Button, Space, Card, message, List } from 'antd';
-import { connect } from 'umi';
-import { DMState } from '../model';
-import { GamerState } from '@/pages/models/gamer';
+import { connect, IGamerState, IDMState } from 'umi';
 import localforage from 'localforage';
 
-type TResultButton = DMState & Pick<GamerState, 'rolesList'>;
+type TResultButton = IDMState & Pick<IGamerState, 'rolesList'>;
 
-const connector = ({ dm, gamer }: { dm: DMState; gamer: GamerState }) => {
+const connector = ({ dm, gamer }: { dm: IDMState; gamer: IGamerState }) => {
   return {
     voteResult: dm.voteResult,
     rolesList: gamer.rolesList,

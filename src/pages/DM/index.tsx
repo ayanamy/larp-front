@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect, createContext, useRef } from 'react';
-import { connect, useDispatch } from 'umi';
+import { connect, useDispatch,IGamerState } from 'umi';
 import { request, formatWSData } from '@/utils';
-import { GamerState } from '@/pages/models/gamer';
 import { message, Row, Col, Empty, Card } from 'antd';
 
 import RolesControl from './components/RolesControl';
@@ -10,9 +9,9 @@ import Handbook from './components/Handbook';
 import GameStatistic from './components/GameStatistic';
 import GameIntro from '@/components/GameIntro';
 import { WS_MSG_TYPE } from '@/constants';
-interface IDM extends GamerState {}
+interface IDM extends IGamerState {}
 export const WSContext = createContext<WebSocket | null>(null);
-const connector = ({ gamer }: { gamer: GamerState }) => {
+const connector = ({ gamer }: { gamer: IGamerState }) => {
   return {
     gameInfo: gamer.gameInfo,
   };

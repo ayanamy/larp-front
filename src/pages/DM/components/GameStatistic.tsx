@@ -1,10 +1,9 @@
 import React, { FC, useState, useEffect } from 'react';
-import { GamerState } from '@/pages/models/gamer';
-import { connect } from 'umi';
+import { connect,IGamerState } from 'umi';
 import { Statistic, Row, Col, Button } from 'antd';
-type TGameStatistic = Pick<GamerState, 'gameInfo'>;
+type TGameStatistic = Pick<IGamerState, 'gameInfo'>;
 const { Countdown } = Statistic;
-const connector = ({ gamer }: { gamer: GamerState }) => {
+const connector = ({ gamer }: { gamer: IGamerState }) => {
   return {
     gameInfo: gamer.gameInfo,
   };

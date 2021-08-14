@@ -1,13 +1,12 @@
 import React, { FC, useState, useEffect, useMemo } from 'react';
 import { Row, Col, Image, Tabs, List, Avatar, Button, message } from 'antd';
-import { connect } from 'umi';
-import { GamerState } from '@/pages/models/gamer';
+import { connect,IGamerState } from 'umi';
 import { TScriptInfo } from '@/types';
-type TMyScripts = Pick<GamerState, 'scriptsList'>;
+type TMyScripts = Pick<IGamerState, 'scriptsList'>;
 
 type TScriptGroup = (readonly [number, TScriptInfo[]])[];
 
-const connector = ({ gamer }: { gamer: GamerState }) => {
+const connector = ({ gamer }: { gamer: IGamerState }) => {
   return {
     scriptsList: gamer.scriptsList,
   };

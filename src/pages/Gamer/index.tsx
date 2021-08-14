@@ -3,15 +3,14 @@ import CluesPool from './components/CluesPool';
 import GameInfo from './components/GameInfo';
 import { Row, Col, Empty, message, notification, Button } from 'antd';
 import { request, formatWSData } from '@/utils';
-import { connect, useDispatch, Dispatch } from 'umi';
-import { GamerState } from '@/pages/models/gamer';
+import { connect, useDispatch, Dispatch,IGamerState } from 'umi';
 import { TGameInfo } from '@/types';
 import EasterEgg from '@/components/EasterEgg';
 import { WS_MSG_TYPE } from '@/constants';
 import localforage from 'localforage';
 import VoteDrawer from './components/VoteDrawer';
 import RolesList from '@/components/RolesList';
-const connector = ({ gamer }: { gamer: GamerState }) => {
+const connector = ({ gamer }: { gamer: IGamerState }) => {
   return {
     gameInfo: gamer.gameInfo,
     user: gamer.user,
@@ -20,7 +19,7 @@ const connector = ({ gamer }: { gamer: GamerState }) => {
   };
 };
 
-type TGamer = Pick<GamerState, 'gameInfo' | 'roleId' | 'user' | 'rolesList'>;
+type TGamer = Pick<IGamerState, 'gameInfo' | 'roleId' | 'user' | 'rolesList'>;
 
 export const WSContext = createContext<WebSocket | null>(null);
 
@@ -31,7 +30,14 @@ const Gamer: FC<TGamer> = ({ gameInfo, user, roleId, rolesList }) => {
     const data = await dispatch({
       type: 'gamer/getGameInfo',
     });
-    getRoles(data?.id, user!);
+    // getRoles(data?.id, user!);
+    dispatch({
+      type:'gamer/getRolesList',
+      payload:{
+        gameId:data?.id,
+        user
+      }
+    })
   };
   const initMyRole = async () => {
     const user = await localforage.getItem('user');
@@ -108,13 +114,14 @@ const Gamer: FC<TGamer> = ({ gameInfo, user, roleId, rolesList }) => {
           notification.info({
             message: `${result.from}分享了线索`,
           });
+          dispatch({
+            type: 'gamer/getMyClues',
+            payload: {
+              roleId,
+            },
+          });
         }
-        dispatch({
-          type: 'gamer/getMyClues',
-          payload: {
-            roleId,
-          },
-        });
+
         break;
       case WS_MSG_TYPE.START_VOTE:
         localforage.setItem('voteItem', result.data);

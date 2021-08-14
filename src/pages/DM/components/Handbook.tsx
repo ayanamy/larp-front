@@ -1,11 +1,10 @@
 import React, { FC, useState, useEffect } from 'react';
-import { connect } from 'umi';
-import { GamerState } from '@/pages/models/gamer';
+import { connect,IGamerState } from 'umi';
 import { Image, Row, Col } from 'antd';
 import { request } from '@/utils';
-type THandbook = Pick<GamerState, 'gameInfo'>;
+type THandbook = Pick<IGamerState, 'gameInfo'>;
 
-const connector = ({ gamer }: { gamer: GamerState }) => {
+const connector = ({ gamer }: { gamer: IGamerState }) => {
   return {
     gameInfo: gamer.gameInfo,
   };

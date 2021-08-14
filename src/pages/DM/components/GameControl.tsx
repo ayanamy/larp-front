@@ -1,8 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Button, Space, Popconfirm } from 'antd';
-import { connect, ConnectProps, useDispatch } from 'umi';
+import { connect, ConnectProps, useDispatch,IGamerState } from 'umi';
 import { request } from '@/utils';
-import { GamerState } from '@/pages/models/gamer';
 import { TGameInfo } from '@/types';
 import VoteButton from './VoteButton';
 import ResultButton from './ResultButton';
@@ -10,7 +9,7 @@ import FootButtons from '@/components/FootButtons';
 interface IControl {
   gameInfo: TGameInfo | null;
 }
-const connector = ({ gamer }: { gamer: GamerState }) => {
+const connector = ({ gamer }: { gamer: IGamerState }) => {
   return {
     gameInfo: gamer.gameInfo,
   };
