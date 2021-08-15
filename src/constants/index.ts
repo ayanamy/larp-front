@@ -8,4 +8,4 @@ export enum WS_MSG_TYPE {
   VOTE = 'vote',
 }
 
-export const API_PREFIX = '/api';
+export const API_PREFIX = process.env.NODE_ENV === 'development' ? '/api' : '/larp';

@@ -1,7 +1,8 @@
 import React, { FC, useState, useEffect } from 'react';
-import { connect,IGamerState } from 'umi';
+import { connect, IGamerState } from 'umi';
 import { Image, Row, Col } from 'antd';
 import { request } from '@/utils';
+import { API_PREFIX } from '@/constants';
 type THandbook = Pick<IGamerState, 'gameInfo'>;
 
 const connector = ({ gamer }: { gamer: IGamerState }) => {
@@ -10,7 +11,7 @@ const connector = ({ gamer }: { gamer: IGamerState }) => {
   };
 };
 const Handbook: FC<THandbook> = ({ gameInfo }) => {
-  const [handbooks, setHandbooks] = useState<string[]>([])
+  const [handbooks, setHandbooks] = useState<string[]>([]);
   useEffect(() => {
     (async () => {
       if (gameInfo?.id) {
@@ -26,7 +27,7 @@ const Handbook: FC<THandbook> = ({ gameInfo }) => {
         {handbooks.map((item, index) => {
           return (
             <Col span={4} key={index}>
-              <Image src={`./api/${item}`} />
+              <Image src={`${API_PREFIX}/${item}`} />
             </Col>
           );
         })}

@@ -1,7 +1,7 @@
 import { history } from 'umi';
 import { extend } from 'umi-request';
 import { notification, message } from 'antd';
-
+import { API_PREFIX } from '@/constants';
 export interface ResponseData {
   code: number;
   data?: any;
@@ -10,7 +10,6 @@ export interface ResponseData {
 
 console.log(process.env.NODE_ENV);
 
-const API_HOST = process.env.NODE_ENV === 'development' ? '/api' : '';
 
 /**
  * 异常处理程序
@@ -41,7 +40,7 @@ const errorHandler = (error: {
  */
 const request = extend({
   errorHandler, // 默认错误处理
-  prefix: API_HOST,
+  prefix: API_PREFIX,
 });
 
 request.use(async (ctx, next) => {

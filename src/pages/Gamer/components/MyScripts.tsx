@@ -1,7 +1,8 @@
 import React, { FC, useState, useEffect, useMemo } from 'react';
 import { Row, Col, Image, Tabs, List, Avatar, Button, message } from 'antd';
-import { connect,IGamerState } from 'umi';
+import { connect, IGamerState } from 'umi';
 import { TScriptInfo } from '@/types';
+import { API_PREFIX } from '@/constants';
 type TMyScripts = Pick<IGamerState, 'scriptsList'>;
 
 type TScriptGroup = (readonly [number, TScriptInfo[]])[];
@@ -38,7 +39,7 @@ const MyScripts: FC<TMyScripts> = ({ scriptsList }) => {
             {list.map((item) => {
               return (
                 <Col span={6} key={item.id}>
-                  <Image src={`./api/${item.content}`} />
+                  <Image src={`${API_PREFIX}/${item.content}`} />
                 </Col>
               );
             })}

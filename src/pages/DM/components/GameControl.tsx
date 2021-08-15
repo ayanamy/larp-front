@@ -38,8 +38,8 @@ const Control: FC<IControl> = ({ gameInfo }) => {
   return (
     <FootButtons>
       <Space>
-        <Popconfirm title="确定要进入下一状态吗？" onConfirm={handleNext}>
-          <Button>进入下一状态</Button>
+        <Popconfirm title="确定要进入下一章吗？" onConfirm={handleNext}>
+          <Button>进入下一章</Button>
         </Popconfirm>
 
         <Popconfirm

@@ -1,9 +1,9 @@
 import { useEffect, FC, useRef, createContext } from 'react';
 import CluesPool from './components/CluesPool';
 import GameInfo from './components/GameInfo';
-import { Row, Col, Empty, message, notification, Button } from 'antd';
+import { Row, Col, Empty, message, notification, Button,Card } from 'antd';
 import { request, formatWSData } from '@/utils';
-import { connect, useDispatch, Dispatch,IGamerState } from 'umi';
+import { connect, useDispatch, Dispatch, IGamerState } from 'umi';
 import { TGameInfo } from '@/types';
 import EasterEgg from '@/components/EasterEgg';
 import { WS_MSG_TYPE } from '@/constants';
@@ -32,15 +32,14 @@ const Gamer: FC<TGamer> = ({ gameInfo, user, roleId, rolesList }) => {
     });
     // getRoles(data?.id, user!);
     dispatch({
-      type:'gamer/getRolesList',
-      payload:{
-        gameId:data?.id,
-        user
-      }
-    })
+      type: 'gamer/getRolesList',
+      payload: {
+        gameId: data?.id,
+        user,
+      },
+    });
   };
   const initMyRole = async () => {
-    const user = await localforage.getItem('user');
     const res = await request(`/game/initMyRole/${gameInfo?.id}`, {
       method: 'POST',
       params: {
@@ -56,36 +55,13 @@ const Gamer: FC<TGamer> = ({ gameInfo, user, roleId, rolesList }) => {
     });
     message.success('初始化成功');
   };
-  const getRoles = async (gameId: number, user: string) => {
-    const res = await request(`/roles/list`, {
-      method: 'GET',
-      params: {
-        gameId,
-        user,
-      },
-    });
-    if (res.code === 200) {
-      dispatch({
-        type: 'gamer/setRolesList',
-        payload: res.data,
-      });
-      if (!roleId) {
-        let currentRole = res.data.find((item: any) => item.user === user);
-        if (currentRole) {
-          dispatch({
-            type: 'gamer/getRoleId',
-          });
-        }
-      }
-    }
-  };
-
   useEffect(() => {
-    getCurrentGame();
-  }, []);
+    if (user) {
+      getCurrentGame();
+    }
+  }, [user]);
 
   const getMyScript = async (gameId: number, rId: number) => {
-    console.log(gameInfo?.id);
     const res = await dispatch({
       type: 'gamer/getMyScript',
       payload: {
@@ -162,10 +138,12 @@ const Gamer: FC<TGamer> = ({ gameInfo, user, roleId, rolesList }) => {
         <WSContext.Provider value={ws.current}>
           <Row style={{ height: '100%' }}>
             <Col span="14">
-              {rolesList.length === 0 && (
-                <Button onClick={initMyRole}>随机我的角色</Button>
-              )}
-              <RolesList rolesList={rolesList} />
+              <Card>
+                {rolesList.length === 0 && (
+                  <Button onClick={initMyRole}>随机我的角色</Button>
+                )}
+                <RolesList rolesList={rolesList} />
+              </Card>
               <CluesPool />
             </Col>
             <Col span="10" style={{ height: '100%' }}>

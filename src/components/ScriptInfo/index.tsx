@@ -5,6 +5,7 @@ import {
   EllipsisOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
+import { API_PREFIX } from '@/constants';
 const { Meta } = Card;
 import { TScriptInfo } from '@/types';
 
@@ -12,7 +13,7 @@ const ScriptInfo: FC<TScriptInfo> = ({ content }) => {
   return (
     <Card
       hoverable
-      cover={<Image src={`./api/${content}`} />}
+      cover={<Image src={`${API_PREFIX}/${content}`} />}
       actions={[
         <SettingOutlined key="setting" />,
         <EditOutlined key="edit" />,

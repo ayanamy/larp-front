@@ -1,34 +1,35 @@
 import { useEffect, useState, useContext, FC, useMemo, useRef } from 'react';
-import { Button, Divider, message, Image, Row, Col, Card } from 'antd';
+import {
+  Button,
+  Divider,
+  message,
+  Image,
+  Row,
+  Col,
+  Card,
+  Collapse,
+} from 'antd';
 import { request } from '@/utils';
 import localforage from 'localforage';
 import { useDispatch, connect, IGamerState } from 'umi';
-import { WSContext } from '../index';
 import ShareClues from './ShareClues';
 import MyClues from './MyClues';
-type TCluesPool = Pick<IGamerState, 'cluesList' | 'roleId' | 'gameInfo'>;
-
+type TCluesPool = Pick<
+  IGamerState,
+  'cluesList' | 'roleId' | 'gameInfo' | 'user'
+>;
+const { Panel } = Collapse;
 const connector = ({ gamer }: { gamer: IGamerState }) => {
   return {
     cluesList: gamer.cluesList,
     roleId: gamer.roleId,
     gameInfo: gamer.gameInfo,
+    user: gamer.user,
   };
 };
 
-const CluesPool: FC<TCluesPool> = ({ cluesList, roleId, gameInfo }) => {
+const CluesPool: FC<TCluesPool> = ({ cluesList, roleId, gameInfo, user }) => {
   const dispatch = useDispatch();
-  const ws = useContext(WSContext);
-  const getNewClues = async () => {
-    // const res = await request('/clues/getNewClues', {
-    //   method: 'POST',
-    //   params: {
-    //     roleId,
-    //   },
-    // });
-    // message.success('获取成功');
-    // getMyClues();
-  };
   const getMyClues = async () => {
     dispatch({
       type: 'gamer/getMyClues',
@@ -58,20 +59,21 @@ const CluesPool: FC<TCluesPool> = ({ cluesList, roleId, gameInfo }) => {
 
   return (
     <div style={{ height: '100%' }}>
-      <h1>线索池</h1>
-      {/* <div>
-        <Button onClick={getNewClues}>获取新线索</Button>
-      </div> */}
-      <Image.PreviewGroup>
-        <Card title="我的线索">
-          <MyClues roleId={roleId!} cluesList={myCluesList} />
-        </Card>
-      </Image.PreviewGroup>
-      <Image.PreviewGroup>
-        <Card title="已分享线索">
-          <ShareClues cluesList={shareCluesList} />
-        </Card>
-      </Image.PreviewGroup>
+      <Card title="线索池">
+        <Collapse >
+          <Panel header="我的线索" key={1}>
+            <Image.PreviewGroup>
+              <MyClues user={user!} roleId={roleId!} cluesList={myCluesList} />
+            </Image.PreviewGroup>
+          </Panel>
+
+          <Panel header="共有线索" key={2}>
+            <Image.PreviewGroup>
+              <ShareClues cluesList={shareCluesList} />
+            </Image.PreviewGroup>
+          </Panel>
+        </Collapse>
+      </Card>
     </div>
   );
 };

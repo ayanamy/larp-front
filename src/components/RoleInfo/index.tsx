@@ -6,6 +6,7 @@ import {
   SettingOutlined,
   FileUnknownOutlined,
 } from '@ant-design/icons';
+import { API_PREFIX } from '@/constants';
 const { Meta } = Card;
 import { TRoleInfo } from '@/types';
 
@@ -22,7 +23,7 @@ const RoleInfo: FC<IRoleInfo> = ({
   return (
     <Card
       hoverable
-      cover={<Image src={(avatar ||= './api/组织者手册/背面.jpg')} />}
+      cover={<Image src={(avatar ||= `${API_PREFIX}/images/封面.jpg`)} />}
       actions={[
         <SettingOutlined key="setting" />,
         <EditOutlined key="edit" />,

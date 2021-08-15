@@ -10,7 +10,7 @@ import {
   message,
   Card,
 } from 'antd';
-import { connect, ConnectProps, useDispatch ,IGamerState} from 'umi';
+import { connect, ConnectProps, useDispatch, IGamerState } from 'umi';
 import { request } from '@/utils';
 const { TabPane } = Tabs;
 import localforage from 'localforage';
@@ -29,16 +29,15 @@ type TGameInfo = Pick<IGamerState, 'gameInfo' | 'rolesList'>;
 const GameInfo: FC<TGameInfo> = ({ gameInfo, rolesList = [] }) => {
   const dispatch = useDispatch();
 
-
   return (
     <div style={{ height: '100%' }}>
-      <Card>
+      <Card style={{ height: '180px', overflow: 'auto' }}>
         <GameIntro
           gameName={gameInfo?.gameName || ''}
           description={gameInfo?.description || ''}
         />
       </Card>
-      <Card>
+      <Card style={{ height: 'calc( 100% - 180px)', overflow: 'auto' }}>
         <MyScripts />
       </Card>
     </div>

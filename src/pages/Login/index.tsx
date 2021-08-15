@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { Form, Input, Button, Checkbox, message, Modal } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { history } from 'umi';
+import { history, useDispatch } from 'umi';
 import { request } from '@/utils';
 import localforage from 'localforage';
 import bg from './bg';
 import './style.less';
 const Login = () => {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
   const onFinish = async (values: any) => {
     const res = await request('/users/login', {
@@ -15,6 +16,10 @@ const Login = () => {
     });
     if (res.code === 200) {
       await localforage.setItem('user', values?.name);
+      dispatch({
+        type: 'gamer/setUser',
+        payload: values?.name,
+      });
       await localforage.setItem('userRole', res?.data.role);
       redirect(res?.data.role);
     } else {
@@ -26,9 +31,9 @@ const Login = () => {
     Modal.info({
       title: '自己搞定',
       content: (
-        <div>{`update users set password = '111111' where user='${
-          user || ''
-        }'`}</div>
+        <div>{`update LARP.users set password = '111111' where user='${
+          user || '你的账号'
+        }';`}</div>
       ),
     });
   };
