@@ -1,19 +1,26 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
 import { TClueInfo } from '@/types';
-import ClueInfo from '@/components/ClueInfo';
+import ClueInfo from './ClueInfo';
+import './style.less';
 type TShareClues = {
   cluesList: TClueInfo[];
+  colorMap: Map<string | number, string>;
 };
-const ShareClues: FC<TShareClues> = ({ cluesList }) => {
+const ShareClues: FC<TShareClues> = ({ cluesList, colorMap }) => {
   return (
-    <Row gutter={8}>
-      {cluesList.map((item) => (
-        <Col span={4} key={item.id}>
-          <ClueInfo {...item} />
-        </Col>
-      ))}
-    </Row>
+    <div className="cluesList">
+      {cluesList.map((item) => {
+        return (
+          <ClueInfo
+            roundColor={colorMap.get(item.round!)}
+            locationColor={colorMap.get(item.location!)}
+            showUser
+            {...item}
+          />
+        );
+      })}
+    </div>
   );
 };
 

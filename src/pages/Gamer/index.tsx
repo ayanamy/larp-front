@@ -1,7 +1,7 @@
 import { useEffect, FC, useRef, createContext } from 'react';
 import CluesPool from './components/CluesPool';
 import GameInfo from './components/GameInfo';
-import { Row, Col, Empty, message, notification, Button,Card } from 'antd';
+import { Row, Col, Empty, message, notification, Button, Card } from 'antd';
 import { request, formatWSData } from '@/utils';
 import { connect, useDispatch, Dispatch, IGamerState } from 'umi';
 import { TGameInfo } from '@/types';
@@ -137,7 +137,7 @@ const Gamer: FC<TGamer> = ({ gameInfo, user, roleId, rolesList }) => {
       {gameInfo ? (
         <WSContext.Provider value={ws.current}>
           <Row style={{ height: '100%' }}>
-            <Col span="14">
+            <Col span="14" style={{ height: '100%' }}>
               <Card>
                 {rolesList.length === 0 && (
                   <Button onClick={initMyRole}>随机我的角色</Button>
