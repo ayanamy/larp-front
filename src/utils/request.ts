@@ -1,6 +1,6 @@
 import { history } from 'umi';
 import { extend } from 'umi-request';
-import { notification, message } from 'antd';
+import { notification } from 'antd';
 import { API_PREFIX } from '@/constants';
 export interface ResponseData {
   code: number;
@@ -9,7 +9,6 @@ export interface ResponseData {
 }
 
 console.log(process.env.NODE_ENV);
-
 
 /**
  * 异常处理程序

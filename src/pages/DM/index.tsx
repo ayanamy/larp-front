@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, createContext, useRef } from 'react';
-import { connect, useDispatch,IGamerState } from 'umi';
+import { connect, useDispatch, IGamerState } from 'umi';
 import { request, formatWSData } from '@/utils';
 import { message, Row, Col, Empty, Card } from 'antd';
 
@@ -8,7 +8,8 @@ import GameControl from './components/GameControl';
 import Handbook from './components/Handbook';
 import GameStatistic from './components/GameStatistic';
 import GameIntro from '@/components/GameIntro';
-import { WS_MSG_TYPE } from '@/constants';
+import { WS_MSG_TYPE, WS_URL } from '@/constants';
+
 interface IDM extends IGamerState {}
 export const WSContext = createContext<WebSocket | null>(null);
 const connector = ({ gamer }: { gamer: IGamerState }) => {
@@ -31,7 +32,7 @@ const DM: FC<IDM> = ({ gameInfo }) => {
     }
   };
   useEffect(() => {
-    ws.current = new WebSocket(`ws://192.168.189.128:8011/webSocket/admin`);
+    ws.current = new WebSocket(`${WS_URL}/webSocket/admin`);
     ws.current.onopen = function () {
       console.log('websocket已打开');
     };

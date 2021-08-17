@@ -88,14 +88,14 @@ export default defineConfig({
       });
     }
   },
-   publicPath: '/larp/',
+  publicPath: '/larp/',
   hash: true,
   history: { type: 'hash' },
   proxy: {
     '/api': {
       target: `http://localhost:8011`, // 测试环境
       changeOrigin: true,
-      pathRewrite: { '^/api': '' },
+      pathRewrite: { '^/api': '/larp' },
     },
   },
 });

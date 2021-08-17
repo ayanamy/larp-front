@@ -42,6 +42,7 @@ const DetailModal: FC<TDetailModal> = ({
   const getDetail = useCallback(async () => {
     const res = await request(`/game/detail/${gameId}`, {
       method: 'POST',
+
     });
     if (res.code === 200) {
       const { clues = [], game = {}, roles = [] } = res.data || {};

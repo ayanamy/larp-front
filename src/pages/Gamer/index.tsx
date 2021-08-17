@@ -6,7 +6,7 @@ import { request, formatWSData } from '@/utils';
 import { connect, useDispatch, Dispatch, IGamerState } from 'umi';
 import { TGameInfo } from '@/types';
 import EasterEgg from '@/components/EasterEgg';
-import { WS_MSG_TYPE } from '@/constants';
+import { WS_MSG_TYPE, WS_URL } from '@/constants';
 import localforage from 'localforage';
 import VoteDrawer from './components/VoteDrawer';
 import RolesList from '@/components/RolesList';
@@ -118,7 +118,7 @@ const Gamer: FC<TGamer> = ({ gameInfo, user, roleId, rolesList }) => {
   useEffect(() => {
     (async () => {
       const uu = await localforage.getItem('user');
-      ws.current = new WebSocket(`ws://192.168.189.128:8011/webSocket/${uu}`);
+      ws.current = new WebSocket(`${WS_URL}/webSocket/${uu}`);
       ws.current.onopen = function () {
         console.log('websocket已打开');
       };

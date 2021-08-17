@@ -5,6 +5,7 @@ import { Table, Button, Space, Popconfirm, message } from 'antd';
 import { ColumnType } from 'antd/es/table';
 import { request, confirm } from '@/utils';
 import { history } from 'umi';
+import { TGameInfo } from '@/types';
 import {
   EditOutlined,
   FileDoneOutlined,
@@ -16,16 +17,7 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons';
 import style from './style.less';
-interface IColumn {
-  id: number;
-  gameName: string;
-  description: string;
-  maxClues: number;
-  maxUser: number;
-  minUser: number;
-  status: number;
-  dm: string;
-}
+interface IColumn extends TGameInfo {}
 
 const GameTable: FC<any> = (props) => {
   const columns: ColumnType<IColumn>[] = [
@@ -100,7 +92,7 @@ const GameTable: FC<any> = (props) => {
             {/* <Button size="small" key="edit">
               编辑
             </Button> */}
-            {record.status === 0 && (
+            {record.status === 0 && record.round === 0 && (
               <Popconfirm
                 title="确定要开启吗"
                 disabled={record.status !== 0}
@@ -130,7 +122,7 @@ const GameTable: FC<any> = (props) => {
                 setDetailModalVisible(true);
               }}
             >
-              初始化
+              {record.round === -1 ? '初始化' : '查看'}
             </Button>
           </Space>
         );
