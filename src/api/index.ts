@@ -27,7 +27,6 @@ export const getMyClues = async (params: any) => {
   });
 };
 
-
 export const getLocation = async (params: any) => {
   return await request('/clues/getLocation', {
     method: 'GET',

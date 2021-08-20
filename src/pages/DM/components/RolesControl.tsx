@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { connect,IGamerState } from 'umi';
+import { connect, IGamerState } from 'umi';
 import RolesList from '@/components/RolesList';
 type TRolesControl = Pick<IGamerState, 'rolesList'>;
 const connector = ({ gamer }: { gamer: IGamerState }) => {

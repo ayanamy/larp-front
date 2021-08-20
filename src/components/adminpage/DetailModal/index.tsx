@@ -38,16 +38,15 @@ const DetailModal: FC<TDetailModal> = ({
     setVisible(false);
   };
   const [rolesList, setRolesList] = useState<TRoleInfo[]>([]);
-  const [cluesList, setCluesList] = useState<TClueInfo[]>([])
+  const [cluesList, setCluesList] = useState<TClueInfo[]>([]);
   const getDetail = useCallback(async () => {
     const res = await request(`/game/detail/${gameId}`, {
       method: 'POST',
-
     });
     if (res.code === 200) {
       const { clues = [], game = {}, roles = [] } = res.data || {};
       setRolesList(roles);
-      setCluesList(clues)
+      setCluesList(clues);
     }
   }, [gameId]);
 

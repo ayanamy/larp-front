@@ -27,7 +27,7 @@ const GameModal: FC<TGameModal> = ({
   const [form] = Form.useForm();
   const [scripts, setScripts] = useState<any[]>([]);
   const [clues, setClues] = useState<any[]>([]);
-  const [handbooks, setHandbooks] = useState<any[]>([])
+  const [handbooks, setHandbooks] = useState<any[]>([]);
   useEffect(() => {
     (async () => {
       if (visible) {

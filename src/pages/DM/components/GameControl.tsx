@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Button, Space, Popconfirm } from 'antd';
-import { connect, ConnectProps, useDispatch,IGamerState } from 'umi';
+import { connect, ConnectProps, useDispatch, IGamerState } from 'umi';
 import { request } from '@/utils';
 import { TGameInfo } from '@/types';
 import VoteButton from './VoteButton';

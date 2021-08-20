@@ -1,5 +1,5 @@
 import React from 'react';
-import { ConfigProvider, message } from 'antd';
+import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 
 export function rootContainer(container: React.ReactNode) {
@@ -11,4 +11,3 @@ export function rootContainer(container: React.ReactNode) {
     container,
   );
 }
-

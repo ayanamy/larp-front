@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { connect,IGamerState } from 'umi';
+import { connect, IGamerState } from 'umi';
 import { Statistic, Row, Col, Button } from 'antd';
 type TGameStatistic = Pick<IGamerState, 'gameInfo'>;
 const { Countdown } = Statistic;

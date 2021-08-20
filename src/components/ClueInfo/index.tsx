@@ -20,7 +20,11 @@ const ClueInfo: FC<IClueInfo> = ({
   location,
 }) => {
   return (
-    <Card hoverable cover={<Image src={`${API_PREFIX}/${images}`} />} actions={actions}>
+    <Card
+      hoverable
+      cover={<Image src={`${API_PREFIX}/${images}`} />}
+      actions={actions}
+    >
       <Meta title={code} description={description} />
     </Card>
   );

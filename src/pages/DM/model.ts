@@ -21,7 +21,9 @@ const DMModel: DMModelType = {
   reducers: {
     setVoteResult(state, action) {
       const data = action.payload as TWSData;
-      const index = state.voteResult.findIndex(({ from }) => from === data.from);
+      const index = state.voteResult.findIndex(
+        ({ from }) => from === data.from,
+      );
       if (index > -1) {
         state.voteResult[index] = data;
       } else {

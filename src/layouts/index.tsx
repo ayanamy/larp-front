@@ -17,8 +17,6 @@ const CommonLayoyt: React.FC = ({ children }) => {
     })();
   }, []);
 
-
-
   return (
     <>
       <Helmet>

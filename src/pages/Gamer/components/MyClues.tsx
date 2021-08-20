@@ -44,7 +44,9 @@ const MyClues: FC<TMyClues> = ({ cluesList, roleId, user, colorMap }) => {
       <Popconfirm title="确定要分享吗" onConfirm={() => shareClue(id)}>
         {/* <Button size="small">分享</Button> */}
         {/* <CopyTwoTone /> */}
-        <Button size="small" type="text">分享</Button>
+        <Button size="small" type="text">
+          分享
+        </Button>
       </Popconfirm>
     );
   };
