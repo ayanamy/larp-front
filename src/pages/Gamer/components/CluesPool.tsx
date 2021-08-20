@@ -1,4 +1,5 @@
-import { useEffect, useState, useContext, FC, useMemo, useRef } from 'react';
+import type { FC} from 'react';
+import { useEffect, useState, useContext, useMemo, useRef } from 'react';
 import {
   Button,
   Divider,
@@ -12,12 +13,14 @@ import {
 } from 'antd';
 import { PresetColorTypes } from 'antd/es/_util/colors';
 import { request } from '@/utils';
-import { useDispatch, connect, IGamerState } from 'umi';
+import type { IGamerState } from 'umi';
+import { useDispatch, connect } from 'umi';
 import { getRandomFromArray } from '@/utils/common';
 
 import ShareClues from './ShareClues';
 import MyClues from './MyClues';
 import { key } from 'localforage';
+
 type TCluesPool = Pick<
   IGamerState,
   'cluesList' | 'roleId' | 'gameInfo' | 'user'

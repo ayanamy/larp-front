@@ -19,11 +19,11 @@ const random = (arr: any[]) => {
 };
 
 export const getRandomFromArray = (arr: any[], num: number) => {
-  let newArr = Array.from(arr);
-  let result = [];
+  const newArr = Array.from(arr);
+  const result = [];
   for (let i = 0; i < num; i++) {
     if (newArr.length > 0) {
-      let index = random(newArr);
+      const index = random(newArr);
       result.push(newArr[index]);
       newArr.splice(index, 1);
     }

@@ -1,5 +1,6 @@
-import React, { FC, useState, useEffect, useMemo, useRef } from 'react';
-import { TClueInfo } from '@/types';
+import type { FC} from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import type { TClueInfo } from '@/types';
 import {
   Row,
   Col,
@@ -12,9 +13,11 @@ import {
 } from 'antd';
 import ClueInfo from './ClueInfo';
 import { CopyTwoTone } from '@ant-design/icons';
-import { useDispatch, IGamerState, connect } from 'umi';
+import type { IGamerState} from 'umi';
+import { useDispatch, connect } from 'umi';
 import { request } from '@/utils';
 import './style.less';
+
 type TMyClues = Pick<IGamerState, 'user' | 'roleId'> & {
   cluesList: TClueInfo[];
   colorMap: Map<string | number, string>;

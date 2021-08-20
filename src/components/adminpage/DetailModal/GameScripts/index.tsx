@@ -1,4 +1,5 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import {
   Modal,
@@ -12,7 +13,7 @@ import {
   Col,
   Image,
 } from 'antd';
-import { TScriptInfo } from '@/types';
+import type { TScriptInfo } from '@/types';
 import ScriptInfo from '@/components/ScriptInfo';
 import { request } from '@/utils';
 

@@ -1,4 +1,5 @@
-import React, { FC, useState, useEffect } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Image } from 'antd';
 import {
   EditOutlined,
@@ -6,8 +7,9 @@ import {
   SettingOutlined,
 } from '@ant-design/icons';
 import { API_PREFIX } from '@/constants';
+import type { TScriptInfo } from '@/types';
+
 const { Meta } = Card;
-import { TScriptInfo } from '@/types';
 
 const ScriptInfo: FC<TScriptInfo> = ({ content }) => {
   return (

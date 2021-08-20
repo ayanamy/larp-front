@@ -1,7 +1,7 @@
-import { TWSData } from '@/types';
+import type { TWSData } from '@/types';
 
 export const formatWSData = (msg: string): TWSData => {
-  let res: TWSData = JSON.parse(msg);
+  const res: TWSData = JSON.parse(msg);
   return res;
 };
 

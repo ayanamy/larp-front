@@ -1,8 +1,10 @@
-import React, { FC, useState, useEffect } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Modal, Input, Button, Space, Checkbox, message } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { request } from '@/utils';
 import localforage from 'localforage';
+
 type TVoteButton = {
   gameId?: number;
 };

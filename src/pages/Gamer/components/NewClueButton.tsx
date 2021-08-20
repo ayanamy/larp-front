@@ -1,7 +1,10 @@
-import React, { FC, useState, useEffect } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form, Radio, message } from 'antd';
-import { connect, useSelector, IGamerState, useDispatch } from 'umi';
+import type { IGamerState} from 'umi';
+import { connect, useSelector, useDispatch } from 'umi';
 import { request } from '@/utils';
+
 type TNewClueButton = Pick<
   IGamerState,
   'cluesLocation' | 'roleId' | 'gameInfo'

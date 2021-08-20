@@ -1,4 +1,5 @@
-import React, { FC, useState, useEffect } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Image } from 'antd';
 import {
   EditOutlined,
@@ -7,8 +8,9 @@ import {
   FileUnknownOutlined,
 } from '@ant-design/icons';
 import { API_PREFIX } from '@/constants';
+import type { TRoleInfo } from '@/types';
+
 const { Meta } = Card;
-import { TRoleInfo } from '@/types';
 
 interface IRoleInfo extends TRoleInfo {
   handleClick?: () => void;

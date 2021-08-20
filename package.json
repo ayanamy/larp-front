@@ -6,7 +6,8 @@
     "postinstall": "umi generate tmp",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
     "test": "umi-test",
-    "test:coverage": "umi-test --coverage"
+    "test:coverage": "umi-test --coverage",
+    "lint:fix":"eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src && yarn lint:style"
   },
   "homepage": ".",
   "gitHooks": {
@@ -22,6 +23,8 @@
   },
   "dependencies": {
     "@ant-design/pro-layout": "^6.5.0",
+    "@umijs/fabric": "^2.6.4",
+    "eslint": "^7.32.0",
     "localforage": "^1.9.0",
     "react": "17.x",
     "react-dom": "17.x",

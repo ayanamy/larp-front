@@ -1,8 +1,11 @@
-import React, { FC, useState, useEffect, useMemo } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Card, Image, Tag, Typography } from 'antd';
-import { connect, IGamerState } from 'umi';
-import { TClueInfo, TRoleInfo } from '@/types';
+import type { IGamerState } from 'umi';
+import { connect } from 'umi';
+import type { TClueInfo, TRoleInfo } from '@/types';
 import { API_PREFIX } from '@/constants';
+
 const { Meta } = Card;
 const { Text } = Typography;
 interface IClueInfo extends TClueInfo {

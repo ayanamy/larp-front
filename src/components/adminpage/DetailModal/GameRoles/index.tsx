@@ -1,4 +1,5 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Alert, Button, Image, Card, Row, Col, message } from 'antd';
 import type { TRoleInfo } from '@/types';
 

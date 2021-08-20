@@ -2,6 +2,7 @@ import { history } from 'umi';
 import { extend } from 'umi-request';
 import { notification } from 'antd';
 import { API_PREFIX } from '@/constants';
+
 export interface ResponseData {
   code: number;
   data?: any;

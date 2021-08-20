@@ -3,9 +3,10 @@ import { history, Helmet, useLocation } from 'umi';
 import localForage from 'localforage';
 import { Layout } from 'antd';
 import './style.less';
-const { Header, Footer, Sider, Content } = Layout;
 import PageHeader from './components/PageHeader';
 import PageFooter from './components/PageFooter';
+
+const { Header, Footer, Sider, Content } = Layout;
 const CommonLayoyt: React.FC = ({ children }) => {
   useEffect(() => {
     (async () => {

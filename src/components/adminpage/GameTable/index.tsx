@@ -1,11 +1,12 @@
-import React, { FC, useEffect, useState } from 'react';
+import type { FC} from 'react';
+import React, { useEffect, useState } from 'react';
 import GameModal from '../GameModal';
 import DetailModal from '../DetailModal';
 import { Table, Button, Space, Popconfirm, message } from 'antd';
-import { ColumnType } from 'antd/es/table';
+import type { ColumnType } from 'antd/es/table';
 import { request, confirm } from '@/utils';
 import { history } from 'umi';
-import { TGameInfo } from '@/types';
+import type { TGameInfo } from '@/types';
 import {
   EditOutlined,
   FileDoneOutlined,
@@ -17,7 +18,8 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons';
 import style from './style.less';
-interface IColumn extends TGameInfo {}
+
+type IColumn = TGameInfo
 
 const GameTable: FC<any> = (props) => {
   const columns: ColumnType<IColumn>[] = [
@@ -133,7 +135,14 @@ const GameTable: FC<any> = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [selectId, setSelectId] = useState(0);
-
+  const fetchList = async () => {
+    const res = await request('/game/list', {
+      method: 'GET',
+    });
+    if (res.code === 200) {
+      setDataSource(res.data ?? []);
+    }
+  };
   const handleDelete = async (gameId: number) => {
     const res = await request(`/game/delete/${gameId}`, {
       method: 'POST',
@@ -160,14 +169,6 @@ const GameTable: FC<any> = (props) => {
     fetchList();
   };
 
-  const fetchList = async () => {
-    let res = await request('/game/list', {
-      method: 'GET',
-    });
-    if (res.code === 200) {
-      setDataSource(res.data ?? []);
-    }
-  };
   useEffect(() => {
     fetchList();
   }, []);

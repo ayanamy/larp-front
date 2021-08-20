@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import type { FC} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Modal,
   Alert,

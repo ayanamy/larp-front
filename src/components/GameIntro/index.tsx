@@ -1,5 +1,7 @@
-import React, { FC, useState, useEffect } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, Row, Col } from 'antd';
+
 const { Paragraph } = Typography;
 type TGameIntro = {
   description: string;

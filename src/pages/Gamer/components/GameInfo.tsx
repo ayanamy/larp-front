@@ -1,4 +1,5 @@
-import { useEffect, useState, FC } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Row,
   Col,
@@ -10,13 +11,16 @@ import {
   message,
   Card,
 } from 'antd';
-import { connect, ConnectProps, useDispatch, IGamerState } from 'umi';
+import type { IGamerState } from 'umi';
+import { connect, ConnectProps, useDispatch } from 'umi';
 import { request } from '@/utils';
-const { TabPane } = Tabs;
 import localforage from 'localforage';
 import RolesList from '@/components/RolesList';
 import GameIntro from '@/components/GameIntro';
 import MyScripts from './MyScripts';
+
+const { TabPane } = Tabs;
+
 const connector = ({ gamer }: { gamer: IGamerState }) => {
   return {
     gameInfo: gamer.gameInfo,

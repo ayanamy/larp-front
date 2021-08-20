@@ -1,15 +1,18 @@
-import { useEffect, FC, useRef, createContext } from 'react';
+import type { FC } from 'react';
+import { useEffect, useRef, createContext, useCallback } from 'react';
 import CluesPool from './components/CluesPool';
 import GameInfo from './components/GameInfo';
 import { Row, Col, Empty, message, notification, Button, Card } from 'antd';
 import { request, formatWSData } from '@/utils';
-import { connect, useDispatch, Dispatch, IGamerState } from 'umi';
+import type { IGamerState } from 'umi';
+import { connect, useDispatch, Dispatch } from 'umi';
 import { TGameInfo } from '@/types';
 import EasterEgg from '@/components/EasterEgg';
 import { WS_MSG_TYPE, WS_URL } from '@/constants';
 import localforage from 'localforage';
 import VoteDrawer from './components/VoteDrawer';
 import RolesList from '@/components/RolesList';
+
 const connector = ({ gamer }: { gamer: IGamerState }) => {
   return {
     gameInfo: gamer.gameInfo,
@@ -40,7 +43,7 @@ const Gamer: FC<TGamer> = ({ gameInfo, user, roleId, rolesList }) => {
     });
   };
   const initMyRole = async () => {
-    const res = await request(`/game/initMyRole/${gameInfo?.id}`, {
+    await request(`/game/initMyRole/${gameInfo?.id}`, {
       method: 'POST',
       params: {
         user,
@@ -61,68 +64,71 @@ const Gamer: FC<TGamer> = ({ gameInfo, user, roleId, rolesList }) => {
     }
   }, [user]);
 
-  const getMyScript = async (gameId: number, rId: number) => {
-    const res = await dispatch({
-      type: 'gamer/getMyScript',
-      payload: {
-        gameId,
-        roleId: rId,
-      },
-    });
-  };
-
-  const handleWSMessage = async (msg: string) => {
-    const result = formatWSData(msg);
-    switch (result.type) {
-      case WS_MSG_TYPE.SET_NEXT_ROUND:
-        await getCurrentGame();
-        notification.info({
-          message: '已开启下一轮',
-        });
-        break;
-      case WS_MSG_TYPE.OPEN_CLUE:
-        notification.info({
-          message: '已开启线索',
-        });
-        break;
-      case WS_MSG_TYPE.SHARE_CLUE:
-        if (user !== result.from) {
-          notification.info({
-            message: `${result.from}分享了线索`,
-          });
-          dispatch({
-            type: 'gamer/getMyClues',
-            payload: {
-              roleId,
-            },
-          });
-        }
-
-        break;
-      case WS_MSG_TYPE.START_VOTE:
-        localforage.setItem('voteItem', result.data);
-        await dispatch({
-          type: 'gamer/getGameInfo',
-        });
-      default:
-        break;
-    }
-  };
+  const getMyScript = useCallback(
+    async (gameId: number, rId: number) => {
+      await dispatch({
+        type: 'gamer/getMyScript',
+        payload: {
+          gameId,
+          roleId: rId,
+        },
+      });
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     if (gameInfo?.round && gameInfo?.round > -1 && roleId && gameInfo?.id) {
       getMyScript(gameInfo.id, roleId);
     }
-  }, [gameInfo?.round, gameInfo?.id, roleId]);
+  }, [gameInfo?.round, gameInfo?.id, roleId, getMyScript]);
 
   useEffect(() => {
+    const handleWSMessage = async (msg: string) => {
+      const result = formatWSData(msg);
+      switch (result.type) {
+        case WS_MSG_TYPE.SET_NEXT_ROUND:
+          await getCurrentGame();
+          notification.info({
+            message: '已开启下一轮',
+          });
+          break;
+        case WS_MSG_TYPE.OPEN_CLUE:
+          notification.info({
+            message: '已开启线索',
+          });
+          break;
+        case WS_MSG_TYPE.SHARE_CLUE:
+          if (user !== result.from) {
+            notification.info({
+              message: `${result.from}分享了线索`,
+            });
+            dispatch({
+              type: 'gamer/getMyClues',
+              payload: {
+                roleId,
+              },
+            });
+          }
+
+          break;
+        case WS_MSG_TYPE.START_VOTE:
+          localforage.setItem('voteItem', result.data);
+          await dispatch({
+            type: 'gamer/getGameInfo',
+          });
+          break;
+        default:
+          break;
+      }
+    };
     (async () => {
       const uu = await localforage.getItem('user');
       ws.current = new WebSocket(`${WS_URL}/webSocket/${uu}`);
-      ws.current.onopen = function () {
+      ws.current.onopen = () => {
         console.log('websocket已打开');
       };
-      ws.current.onmessage = function (msg) {
+      ws.current.onmessage = (msg) => {
         if (msg.data === '连接成功') {
           return;
         }

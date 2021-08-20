@@ -6,6 +6,7 @@ import { request } from '@/utils';
 import localforage from 'localforage';
 import bg from './bg';
 import './style.less';
+
 const Login = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();

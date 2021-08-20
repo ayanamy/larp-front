@@ -1,6 +1,8 @@
-import React, { FC, useState, useEffect } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Modal, Input, Button, Space, Card, message, List } from 'antd';
-import { connect, IGamerState, IDMState } from 'umi';
+import type { IGamerState, IDMState } from 'umi';
+import { connect } from 'umi';
 import localforage from 'localforage';
 
 type TResultButton = IDMState & Pick<IGamerState, 'rolesList'>;

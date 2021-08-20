@@ -1,8 +1,10 @@
-import React, { FC, useState, useEffect } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
-import { TClueInfo } from '@/types';
+import type { TClueInfo } from '@/types';
 import ClueInfo from './ClueInfo';
 import './style.less';
+
 type TShareClues = {
   cluesList: TClueInfo[];
   colorMap: Map<string | number, string>;

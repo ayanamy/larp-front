@@ -1,6 +1,8 @@
-import React, { FC, useState, useEffect, Children } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect, Children } from 'react';
 import { Button } from 'antd';
-import { SizeType } from 'antd/es/config-provider/SizeContext';
+import type { SizeType } from 'antd/es/config-provider/SizeContext';
+
 type TFootButtons = {
   size?: SizeType;
 };

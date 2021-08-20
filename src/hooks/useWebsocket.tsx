@@ -1,4 +1,5 @@
-import { createContext, useContext, useRef, FC } from 'react';
+import type { FC } from 'react';
+import { createContext, useContext, useRef } from 'react';
 
 const WSContext = createContext<WebSocket | null>(null);
 

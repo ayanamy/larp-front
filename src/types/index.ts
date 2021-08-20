@@ -1,4 +1,5 @@
-import { WS_MSG_TYPE } from '@/constants';
+import type { WS_MSG_TYPE } from '@/constants';
+
 export type TRoleInfo = {
   avatar?: string;
   roleName: string;
@@ -60,7 +61,7 @@ export type TRequestResult = {
 
 export type TWSData = {
   type: WS_MSG_TYPE;
-  from?: String;
-  to?: String;
+  from?: string;
+  to?: string;
   data?: any;
 };

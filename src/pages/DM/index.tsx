@@ -1,5 +1,7 @@
-import React, { FC, useState, useEffect, createContext, useRef } from 'react';
-import { connect, useDispatch, IGamerState } from 'umi';
+import type { FC} from 'react';
+import React, { useState, useEffect, createContext, useRef } from 'react';
+import type { IGamerState } from 'umi';
+import { connect, useDispatch } from 'umi';
 import { request, formatWSData } from '@/utils';
 import { message, Row, Col, Empty, Card } from 'antd';
 
@@ -10,7 +12,7 @@ import GameStatistic from './components/GameStatistic';
 import GameIntro from '@/components/GameIntro';
 import { WS_MSG_TYPE, WS_URL } from '@/constants';
 
-interface IDM extends IGamerState {}
+type IDM = IGamerState
 export const WSContext = createContext<WebSocket | null>(null);
 const connector = ({ gamer }: { gamer: IGamerState }) => {
   return {
@@ -36,9 +38,9 @@ const DM: FC<IDM> = ({ gameInfo }) => {
     ws.current.onopen = function () {
       console.log('websocket已打开');
     };
-    //获得消息事件
+    // 获得消息事件
     ws.current.onmessage = function (msg) {
-      var serverMsg = '收到服务端信息：' + msg.data;
+      const serverMsg = `收到服务端信息：${  msg.data}`;
       console.log(serverMsg);
       if (msg.data === '连接成功') {
         return;
@@ -93,12 +95,14 @@ const DM: FC<IDM> = ({ gameInfo }) => {
             span={10}
             style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
           >
-            {/* <div style={{ height: '200px', overflow: 'auto' }}>
-              <GameIntro
-                gameName={gameInfo.gameName ?? ''}
-                description={gameInfo.description || ''}
-              />
-            </div> */}
+            <div style={{ height: '200px', overflow: 'auto' }}>
+              <Card>
+                <GameIntro
+                  gameName={gameInfo.gameName ?? ''}
+                  description={gameInfo.description || ''}
+                />
+              </Card>
+            </div>
             <div style={{ height: '300px', overflow: 'auto' }}>
               <Card>
                 <RolesControl />

@@ -1,4 +1,5 @@
-import React, { FC, useState, useEffect, useMemo } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import {
   Modal,
@@ -13,7 +14,7 @@ import {
   Row,
   Col,
 } from 'antd';
-import { TClueInfo } from '@/types';
+import type { TClueInfo } from '@/types';
 import ClueInfo from '@/components/ClueInfo';
 import { request } from '@/utils';
 
@@ -46,11 +47,11 @@ const GameClues: FC<TGameClues> = ({ cluesList }) => {
   const clues: TClueList = useMemo(() => {
     const cluesMap = new Map<number, Map<string, TClueInfo[]>>();
     cluesList.map((item) => {
-      let round = item.round || -1;
-      let location = item.location || '其他';
-      let roundMap = cluesMap.get(round);
+      const round = item.round || -1;
+      const location = item.location || '其他';
+      const roundMap = cluesMap.get(round);
       if (roundMap) {
-        let locationMap = roundMap.get(location);
+        const locationMap = roundMap.get(location);
         if (locationMap) {
           roundMap.set(location, [...locationMap, item]);
         } else {

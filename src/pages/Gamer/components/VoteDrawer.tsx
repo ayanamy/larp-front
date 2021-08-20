@@ -1,11 +1,14 @@
-import React, { FC, useState, useEffect, useMemo, useContext } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Drawer, Button, Form, Select, Popconfirm, Divider } from 'antd';
-import { connect, IGamerState } from 'umi';
+import type { IGamerState } from 'umi';
+import { connect } from 'umi';
 import localforage from 'localforage';
 import { WSContext } from '../index';
-import { TWSData } from '@/types';
+import type { TWSData } from '@/types';
 import { buildWsData } from '@/utils/format';
 import { WS_MSG_TYPE } from '@/constants';
+
 type TVoteDrawer = Pick<IGamerState, 'rolesList' | 'gameInfo' | 'user'>;
 const { Option } = Select;
 const connector = ({ gamer }: { gamer: IGamerState }) => {

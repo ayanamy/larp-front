@@ -1,8 +1,10 @@
-import React, { FC, useState, useEffect } from 'react';
-import { TRoleInfo } from '@/types';
+import type { FC} from 'react';
+import React, { useState, useEffect } from 'react';
+import type { TRoleInfo } from '@/types';
 import { Avatar, Image, Row, Col, Typography, Card } from 'antd';
 import { API_PREFIX } from '@/constants';
 import './style.less';
+
 const { Meta } = Card;
 const { Text } = Typography;
 

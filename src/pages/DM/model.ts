@@ -1,5 +1,7 @@
-import { ImmerReducer, Effect } from 'umi';
-import { TWSData } from '@/types';
+import type { ImmerReducer} from 'umi';
+import { Effect } from 'umi';
+import type { TWSData } from '@/types';
+
 export interface IDMState {
   voteResult: TWSData[];
 }

@@ -1,11 +1,13 @@
-import React, { FC, useState, useEffect } from 'react';
+import type { FC} from 'react';
 import { Button, Space, Popconfirm } from 'antd';
-import { connect, ConnectProps, useDispatch, IGamerState } from 'umi';
+import type { IGamerState } from 'umi';
+import { connect, ConnectProps, useDispatch } from 'umi';
 import { request } from '@/utils';
-import { TGameInfo } from '@/types';
+import type { TGameInfo } from '@/types';
 import VoteButton from './VoteButton';
 import ResultButton from './ResultButton';
 import FootButtons from '@/components/FootButtons';
+
 interface IControl {
   gameInfo: TGameInfo | null;
 }

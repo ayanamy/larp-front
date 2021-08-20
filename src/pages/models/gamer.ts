@@ -1,4 +1,4 @@
-import { ImmerReducer, Effect, Subscription } from 'umi';
+import type { ImmerReducer, Effect, Subscription } from 'umi';
 import localforage from 'localforage';
 
 import type { TGameInfo, TRoleInfo, TClueInfo, TScriptInfo } from '@/types';
@@ -10,6 +10,7 @@ import {
   getMyClues,
   getLocation,
 } from '@/api';
+
 export interface IGamerState {
   gameInfo: TGameInfo | null;
   rolesList: TRoleInfo[];

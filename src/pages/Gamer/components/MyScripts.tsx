@@ -1,8 +1,11 @@
-import React, { FC, useState, useEffect, useMemo } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Row, Col, Image, Tabs, List, Avatar, Button, message } from 'antd';
-import { connect, IGamerState } from 'umi';
-import { TScriptInfo } from '@/types';
+import type { IGamerState } from 'umi';
+import { connect } from 'umi';
+import type { TScriptInfo } from '@/types';
 import { API_PREFIX } from '@/constants';
+
 type TMyScripts = Pick<IGamerState, 'scriptsList'>;
 
 type TScriptGroup = (readonly [number, TScriptInfo[]])[];
@@ -17,8 +20,8 @@ const MyScripts: FC<TMyScripts> = ({ scriptsList }) => {
   const scriptsGroup: TScriptGroup = useMemo(() => {
     const scriptMap = new Map<number, TScriptInfo[]>();
     scriptsList.map((item) => {
-      let round = item.round!;
-      let sm = scriptMap.get(round);
+      const round = item.round!;
+      const sm = scriptMap.get(round);
       if (sm) {
         scriptMap.set(round, [...sm, item]);
       } else {

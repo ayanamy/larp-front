@@ -1,8 +1,9 @@
-import React, { FC, useState, useEffect } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect, useDispatch, history } from 'umi';
 import { Dropdown, Menu, Space } from 'antd';
-import { MenuInfo } from 'rc-menu/lib/interface';
-import { IGamerState } from 'umi';
+import type { MenuInfo } from 'rc-menu/lib/interface';
+import type { IGamerState } from 'umi';
 import localForage from 'localforage';
 import { confirm } from '@/utils/common';
 import Logo from '@/components/Logo';

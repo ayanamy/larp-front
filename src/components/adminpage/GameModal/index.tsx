@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
+import type { FC} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Upload, message, Slider } from 'antd';
 import { FileAddFilled, FileDoneOutlined } from '@ant-design/icons';
 import { request } from '@/utils';
@@ -54,7 +55,7 @@ const GameModal: FC<TGameModal> = ({
 
   const onOk = async () => {
     try {
-      let values = await form.validateFields();
+      const values = await form.validateFields();
       const formData = new FormData();
       if (values.userNum) {
         formData.append('minUser', values.userNum[0]);

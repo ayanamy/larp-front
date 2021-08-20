@@ -1,10 +1,13 @@
-import React, { FC, useState, useEffect } from 'react';
+import type { FC} from 'react';
+import React, { useState, useEffect } from 'react';
 import FootButtons from '@/components/FootButtons';
 import { request } from '@/utils';
 import { TGameInfo } from '@/types';
 import { Button, message, Popconfirm, Space } from 'antd';
-import { connect, useDispatch, IGamerState } from 'umi';
+import type { IGamerState } from 'umi';
+import { connect, useDispatch } from 'umi';
 import NewClueButton from './NewClueButton';
+
 type TGamerOperation = Pick<IGamerState, 'roleId' | 'gameInfo'>;
 
 const connector = ({ gamer }: { gamer: IGamerState }) => {
