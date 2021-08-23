@@ -4,11 +4,8 @@ import {
   Modal,
   Alert,
   Button,
-  Form,
-  Input,
   Upload,
   message,
-  Slider,
   Tabs,
 } from 'antd';
 import GameClues from './GameClues';
@@ -27,7 +24,6 @@ const layout = {
   wrapperCol: { span: 18 },
 };
 const { TabPane } = Tabs;
-const { Dragger } = Upload;
 const DetailModal: FC<TDetailModal> = ({
   visible,
   setVisible,

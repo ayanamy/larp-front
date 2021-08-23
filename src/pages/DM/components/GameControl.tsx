@@ -1,7 +1,7 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import { Button, Space, Popconfirm } from 'antd';
 import type { IGamerState } from 'umi';
-import { connect, ConnectProps, useDispatch } from 'umi';
+import { connect, useDispatch, Link } from 'umi';
 import { request } from '@/utils';
 import type { TGameInfo } from '@/types';
 import VoteButton from './VoteButton';
@@ -53,6 +53,9 @@ const Control: FC<IControl> = ({ gameInfo }) => {
 
         <VoteButton gameId={gameInfo?.id} />
         <ResultButton />
+        <Button type="link" size="small">
+          <Link to="/admin">返回列表</Link>
+        </Button>
       </Space>
     </FootButtons>
   );

@@ -1,25 +1,9 @@
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
-import {
-  Row,
-  Col,
-  Image,
-  Tabs,
-  List,
-  Avatar,
-  Button,
-  message,
-  Card,
-} from 'antd';
+import { Card } from 'antd';
 import type { IGamerState } from 'umi';
-import { connect, ConnectProps, useDispatch } from 'umi';
-import { request } from '@/utils';
-import localforage from 'localforage';
-import RolesList from '@/components/RolesList';
+import { connect } from 'umi';
 import GameIntro from '@/components/GameIntro';
 import MyScripts from './MyScripts';
-
-const { TabPane } = Tabs;
 
 const connector = ({ gamer }: { gamer: IGamerState }) => {
   return {
@@ -30,9 +14,7 @@ const connector = ({ gamer }: { gamer: IGamerState }) => {
 
 type TGameInfo = Pick<IGamerState, 'gameInfo' | 'rolesList'>;
 
-const GameInfo: FC<TGameInfo> = ({ gameInfo, rolesList = [] }) => {
-  const dispatch = useDispatch();
-
+const GameInfo: FC<TGameInfo> = ({ gameInfo }) => {
   return (
     <div style={{ height: '100%' }}>
       <Card style={{ height: '180px', overflow: 'auto' }}>

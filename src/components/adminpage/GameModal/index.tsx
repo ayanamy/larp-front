@@ -1,8 +1,9 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Upload, message, Slider } from 'antd';
 import { FileAddFilled, FileDoneOutlined } from '@ant-design/icons';
 import { request } from '@/utils';
+import Uploader from '@/components/Uploader';
 
 type TGameModal = {
   visible: boolean;
@@ -67,20 +68,20 @@ const GameModal: FC<TGameModal> = ({
           formData.append(key, value as any);
         }
       });
-      for (const script of scripts) {
-        formData.append('scripts', script);
-      }
-      for (const clue of clues) {
-        formData.append('clues', clue);
-      }
-      for (const handbook of handbooks) {
-        formData.append('handbook', handbook);
-      }
+
+      Object.values(scripts).forEach((value) => {
+        formData.append('scripts', value);
+      });
+      Object.values(clues).forEach((value) => {
+        formData.append('clues', value);
+      });
+      Object.values(handbooks).forEach((value) => {
+        formData.append('handbook', value);
+      });
       const res = await request('/game/create', {
         method: 'POST',
         data: formData,
       });
-      console.log(res);
       if (res.code === 200) {
         message.success('新建成功');
         setVisible(false);
@@ -89,7 +90,9 @@ const GameModal: FC<TGameModal> = ({
       } else {
         message.warn(res.msg);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -142,66 +145,25 @@ const GameModal: FC<TGameModal> = ({
           <TextArea />
         </FormItem>
         <FormItem label="导入剧本">
-          <Dragger
-            directory
+          <Uploader
             fileList={scripts}
-            showUploadList={false}
             beforeUpload={(file, fileList) => {
               try {
                 if (!form.getFieldValue('gameName')) {
                   let gameName = file?.webkitRelativePath ?? '';
-                  gameName = gameName.split('/')[0];
+                  [gameName] = gameName.split('/');
                   form.setFieldsValue({ gameName });
                 }
               } catch (error) {}
               setScripts(fileList);
             }}
-          >
-            {scripts.length > 0 ? (
-              <FileDoneOutlined
-                style={{ color: '#447CE6', fontSize: '24px' }}
-              />
-            ) : (
-              <FileAddFilled style={{ color: '#447CE6', fontSize: '24px' }} />
-            )}
-          </Dragger>
+          />
         </FormItem>
         <FormItem label="导入线索">
-          <Dragger
-            directory
-            fileList={clues}
-            showUploadList={false}
-            beforeUpload={(file, fileList) => {
-              setClues(fileList);
-            }}
-          >
-            {clues.length > 0 ? (
-              <FileDoneOutlined
-                style={{ color: '#447CE6', fontSize: '24px' }}
-              />
-            ) : (
-              <FileAddFilled style={{ color: '#447CE6', fontSize: '24px' }} />
-            )}
-          </Dragger>
+          <Uploader fileList={clues} setFileList={setClues} />
         </FormItem>
-
         <FormItem label="导入组织者手册">
-          <Dragger
-            directory
-            fileList={handbooks}
-            showUploadList={false}
-            beforeUpload={(file, fileList) => {
-              setHandbooks(fileList);
-            }}
-          >
-            {handbooks.length > 0 ? (
-              <FileDoneOutlined
-                style={{ color: '#447CE6', fontSize: '24px' }}
-              />
-            ) : (
-              <FileAddFilled style={{ color: '#447CE6', fontSize: '24px' }} />
-            )}
-          </Dragger>
+          <Uploader fileList={handbooks} setFileList={setHandbooks} />
         </FormItem>
       </Form>
     </Modal>

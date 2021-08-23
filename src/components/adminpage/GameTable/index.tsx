@@ -1,27 +1,22 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import GameModal from '../GameModal';
 import DetailModal from '../DetailModal';
 import { Table, Button, Space, Popconfirm, message } from 'antd';
 import type { ColumnType } from 'antd/es/table';
 import { request, confirm } from '@/utils';
-import { history } from 'umi';
+import { history, Link } from 'umi';
 import type { TGameInfo } from '@/types';
-import {
-  EditOutlined,
-  FileDoneOutlined,
-  CopyOutlined,
-  ExclamationCircleOutlined,
-  EllipsisOutlined,
-  PlusOutlined,
-  SearchOutlined,
-  DeleteOutlined,
-} from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import style from './style.less';
 
-type IColumn = TGameInfo
+type IColumn = TGameInfo;
 
-const GameTable: FC<any> = (props) => {
+const GameTable: FC = () => {
+  const [dataSource, setDataSource] = useState<IColumn[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [detailModalVisible, setDetailModalVisible] = useState(false);
+  const [selectId, setSelectId] = useState(0);
   const columns: ColumnType<IColumn>[] = [
     {
       title: 'id',
@@ -76,20 +71,16 @@ const GameTable: FC<any> = (props) => {
       render: (text, record) => {
         return (
           <Space>
-            <Popconfirm
-              title="确定要删除吗"
-              disabled={record.status !== 0}
-              onConfirm={() => handleDelete(record.id)}
-            >
-              <Button
-                size="small"
-                danger
-                key="delete"
-                disabled={record.status !== 0}
+            {record.status === 0 && (
+              <Popconfirm
+                title="确定要删除吗"
+                onConfirm={() => handleDelete(record.id)}
               >
-                删除
-              </Button>
-            </Popconfirm>
+                <Button size="small" danger key="delete">
+                  删除
+                </Button>
+              </Popconfirm>
+            )}
 
             {/* <Button size="small" key="edit">
               编辑
@@ -105,16 +96,6 @@ const GameTable: FC<any> = (props) => {
                 </Button>
               </Popconfirm>
             )}
-            {record.status === 1 && (
-              <Popconfirm
-                title="确定要完成吗"
-                onConfirm={() => handleFinish(record.id)}
-              >
-                <Button size="small" key="finish">
-                  完成游戏
-                </Button>
-              </Popconfirm>
-            )}
             <Button
               size="small"
               type="primary"
@@ -126,25 +107,36 @@ const GameTable: FC<any> = (props) => {
             >
               {record.round === -1 ? '初始化' : '查看'}
             </Button>
+            {record.status === 1 && (
+              <>
+                <Popconfirm
+                  title="确定要完成吗"
+                  onConfirm={() => handleFinish(record.id)}
+                >
+                  <Button size="small" key="finish">
+                    完成游戏
+                  </Button>
+                </Popconfirm>
+                <Button type="link" size="small">
+                  <Link to="/dm">进入游戏</Link>
+                </Button>
+              </>
+            )}
+
           </Space>
         );
       },
     },
   ];
-  const [dataSource, setDataSource] = useState<IColumn[]>([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [detailModalVisible, setDetailModalVisible] = useState(false);
-  const [selectId, setSelectId] = useState(0);
+
   const fetchList = async () => {
     const res = await request('/game/list', {
       method: 'GET',
     });
-    if (res.code === 200) {
-      setDataSource(res.data ?? []);
-    }
+    setDataSource(res.data ?? []);
   };
   const handleDelete = async (gameId: number) => {
-    const res = await request(`/game/delete/${gameId}`, {
+    await request(`/game/delete/${gameId}`, {
       method: 'POST',
     });
     message.success('删除成功');
@@ -152,7 +144,7 @@ const GameTable: FC<any> = (props) => {
   };
 
   const handleStart = async (gameId: number) => {
-    const res = await request(`/game/start/${gameId}`, {
+    await request(`/game/start/${gameId}`, {
       method: 'POST',
     });
     message.success('开启成功');
@@ -162,7 +154,7 @@ const GameTable: FC<any> = (props) => {
   };
 
   const handleFinish = async (gameId: number) => {
-    const res = await request(`/game/finish/${gameId}`, {
+    await request(`/game/finish/${gameId}`, {
       method: 'POST',
     });
     message.success('完成成功');
